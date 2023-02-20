@@ -1,61 +1,18 @@
 # Big Data Group28
 
 
-
-## Getting started
-
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
-
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
-
-## Add your files
-
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
-
-```
-cd existing_repo
-git remote add origin https://stgit.dcs.gla.ac.uk/big-data-m-h/2022/team-28/Big-Data-Group28.git
-git branch -M main
-git push -uf origin main
-```
-
-## Integrate with your tools
-
-- [ ] [Set up project integrations](https://stgit.dcs.gla.ac.uk/big-data-m-h/2022/team-28/Big-Data-Group28/-/settings/integrations)
-
-## Collaborate with your team
-
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
-
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
 ## Name
-Choose a self-explaining name for your project.
+大数据课程的评估练习任务
 
 ## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+任务的主要内容是开发一个基于批处理的文本搜索和过滤管道，通过对大量文本文档和用户定义的查询进行处理，对于每个查询，排名相关性最高的文本文档，并过滤出最终排名中过于相似的文档。每个查询应返回前10个文档作为输出。在处理过程中，需要移除停用词和应用词干提取技术。文档应使用DPH排名模型进行评分。最后，对于每个查询的文档排名进行分析，移除不必要的冗余文档（近似重复文档），如果存在两个文档的标题之间的文本距离（使用提供的比较函数）小于0.5，则只保留其中最相关的文档（基于DPH得分）。评估标准包括代码功能、代码质量、效率以及提交的报告。
+数据集包含华盛顿邮报的新闻文章，以及一组查询。有两个版本的数据集：样本和完整数据集。样本数据集是为了允许您使用本地spark部署（如教程中所示）快速迭代设计。完整数据集由约670,000个文档组成。每个查询包含原始查询和查询术语，以及每个查询术语的出现次数。每个新闻文章包含唯一的文章标识符、文章标题、文章内容等信息。本次练习只需要使用'id'、'title'和'contents'字段。
+学生需要在提供的Java模板项目上实现必要的Spark函数，将一个包含新闻文章的Dataset<NewsArticle>和一个包含查询的Dataset<Query>转换为一个包含每个查询的10个文档排名的List<DocumentRanking>。解决方案应只包括Spark转换和操作，除了驱动程序中选择执行的任何最终处理外，不应执行任何“离线”计算（例如，预构建搜索索引），即所有处理应在Spark应用程序的生命周期中发生。模板项目提供了一些代码实现以帮助学生进行实现。除此之外，学生需要提交一份短报告，描述解决方案的设计逻辑和实现，并对方案的效率进行讨论。提交的方式包括一个包含最终报告的pdf文件和一个包含代码的单个zip文件。
+该练习将根据正确的实现、源代码的质量/可读性、源代码的文档、源代码的效率/可扩展性进行评分，并转换成分数，综合分数在0-25分之间，然后将数字分数转换为字母等级，评分标准如下：
+• 正确实现得分12分（部分正确实现得部分分）。
+• 源代码的质量/可读性得分3分。
+• 源代码文档得分4分。
+• 源代码效率/可扩展性得分6分。
 
 ## Badges
 On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
