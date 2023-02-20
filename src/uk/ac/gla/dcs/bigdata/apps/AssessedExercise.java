@@ -4,15 +4,17 @@ import java.io.File;
 import java.util.List;
 import org.apache.spark.SparkConf;
 import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Encoder;
 import org.apache.spark.sql.Encoders;
+import org.apache.spark.sql.KeyValueGroupedDataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
-
 import uk.ac.gla.dcs.bigdata.providedfunctions.NewsFormaterMap;
 import uk.ac.gla.dcs.bigdata.providedfunctions.QueryFormaterMap;
 import uk.ac.gla.dcs.bigdata.providedstructures.DocumentRanking;
 import uk.ac.gla.dcs.bigdata.providedstructures.NewsArticle;
 import uk.ac.gla.dcs.bigdata.providedstructures.Query;
+import uk.ac.gla.dcs.bigdata.studentfunctions.PreProcessNews;
 
 /**
  * This is the main class where your Spark topology should be specified.
@@ -99,6 +101,11 @@ public class AssessedExercise {
 		// Your Spark Topology should be defined here
 		//----------------------------------------------------------------
 		
+		
+		KeyValueGroupedDataset<String, NewsArticle> newsAfterProcessor = news.groupByKey(new PreProcessNews(), Encoders.STRING());
+		
+		
+
 		
 		return null; // replace this with the the list of DocumentRanking output by your topology
 	}
