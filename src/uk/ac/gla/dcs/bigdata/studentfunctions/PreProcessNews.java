@@ -8,14 +8,16 @@ import org.apache.spark.api.java.function.MapFunction;
 import uk.ac.gla.dcs.bigdata.providedstructures.ContentItem;
 import uk.ac.gla.dcs.bigdata.providedstructures.NewsArticle;
 import uk.ac.gla.dcs.bigdata.providedutilities.TextPreProcessor;
+import uk.ac.gla.dcs.bigdata.studentstructures.NewsArticleProcessed;
 
-public class PreProcessNews implements MapFunction<NewsArticle, String>{
+public class PreProcessNews implements MapFunction<NewsArticle, NewsArticleProcessed>{
 	
 	private static final long serialVersionUID = 6475166483071609772L;
 
 	private transient TextPreProcessor processor;
+	
 	@Override
-	public String call(NewsArticle value) throws Exception {
+	public NewsArticleProcessed call(NewsArticle value) throws Exception {
 		
 		// initial the TextPreProcessor
 		if (processor==null) processor = new TextPreProcessor();
@@ -54,7 +56,12 @@ public class PreProcessNews implements MapFunction<NewsArticle, String>{
 			
 		}
 			
-		return  String.join(",", result);
+		String finalResult = String.join(",", result);
+		NewsArticleProcessed temp = new NewsArticleProcessed();
+		temp.setNews(value);
+		temp.setProcessedContent(finalResult);
+		
+		return temp;
 	}
 	
 

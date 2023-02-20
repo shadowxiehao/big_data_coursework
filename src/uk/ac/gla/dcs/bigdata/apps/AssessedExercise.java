@@ -9,12 +9,19 @@ import org.apache.spark.sql.Encoders;
 import org.apache.spark.sql.KeyValueGroupedDataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
+
+import uk.ac.gla.dcs.bigdata.functions.flatmap.PlatformFilterFlatMap;
+import uk.ac.gla.dcs.bigdata.functions.map.SteamGamesToListMap;
 import uk.ac.gla.dcs.bigdata.providedfunctions.NewsFormaterMap;
 import uk.ac.gla.dcs.bigdata.providedfunctions.QueryFormaterMap;
 import uk.ac.gla.dcs.bigdata.providedstructures.DocumentRanking;
 import uk.ac.gla.dcs.bigdata.providedstructures.NewsArticle;
 import uk.ac.gla.dcs.bigdata.providedstructures.Query;
+import uk.ac.gla.dcs.bigdata.structures.SteamGameList;
+import uk.ac.gla.dcs.bigdata.structures.SteamGameStats;
 import uk.ac.gla.dcs.bigdata.studentfunctions.PreProcessNews;
+import uk.ac.gla.dcs.bigdata.studentfunctions.TextualDistanceCounter;
+import uk.ac.gla.dcs.bigdata.studentstructures.NewsArticleProcessed;
 
 /**
  * This is the main class where your Spark topology should be specified.
@@ -102,11 +109,20 @@ public class AssessedExercise {
 		//----------------------------------------------------------------
 		
 
-		KeyValueGroupedDataset<String, NewsArticle> newsAfterProcessor = news.groupByKey(new PreProcessNews(), Encoders.STRING());
+		// KeyValueGroupedDataset<String, NewsArticle> newsAfterProcessor = news.groupByKey(new PreProcessNews(), Encoders.STRING());
 		
-		
+		// In Spark, data tranformations are specified by calling transformation functions on Datasets
+		// The most basic transformation is 'map', this converts each item in the dataset to a new item (that may be of a different type)
+		// The map function takes as input two parameters
+		//   - A class that implements MapFunction<InputType,OutputType>
+		//   - An encoder for the output type (which we just created in the previous step)
+		Encoder<NewsArticleProcessed> NewsArticleProcessedEncoder = Encoders.bean(NewsArticleProcessed.class);
+		Dataset<NewsArticleProcessed> newsProcessed =  news.map(new PreProcessNews(), NewsArticleProcessedEncoder);
 
-		
+//		TextualDistanceCounter similarityFilter = new TextualDistanceCounter(newsProcessed);
+//		
+//		Dataset<NewsArticle> filterdNewsArticles = newsProcessed.flatMapGroups(similarityFilter, Encoders.bean(NewsArticle.class));
+//		
 		return null; // replace this with the the list of DocumentRanking output by your topology
 	}
 	
