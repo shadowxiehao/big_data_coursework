@@ -6,6 +6,16 @@ Big-data Assessed Coursework Group 2
 
 ## Description
 
+Goal:
+The core goal of this pipeline is to take in a large set of text documents and a set of user defined queries, then for each query, rank the text documents by relevance for that query, as well as filter out any overly similar documents in the final ranking. The top 10 documents for each query should be returned as output.
+
+For each document and query
+
+1. remove stopwords and apply stemming for document (processor provided->textPreProcessor.java)
+2. get DPH score(calculate relevance)(provided->DPHScorer.java) , connect with document and query
+3. textual distance(reduce duplication)(provided->TextDistanceCalculator.java)
+4. ranking and return top 10 documents for current query(provided->RankedResult.java)
+
 本次任务的目标是熟悉使用 Apache Spark 设计、实现和性能测试大数据分析任务。您将需要设计和实现一个相对复杂的 Spark 应用程序。然后，在各种大小的数据上本地测试该应用程序的运行。最后，您将编写一个简短的报告，描述您的设计、设计决策，以及在适当的情况下批判您的设计。您将根据代码功能（是否产生预期结果）、代码质量（是否设计良好并遵循良好的软件工程实践）和效率（速度有多快并且是否使用资源高效）以及您提交的报告进行评估。
 
 任务描述：

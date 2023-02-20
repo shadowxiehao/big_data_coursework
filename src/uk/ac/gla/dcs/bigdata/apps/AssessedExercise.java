@@ -101,7 +101,7 @@ public class AssessedExercise {
 		// Your Spark Topology should be defined here
 		//----------------------------------------------------------------
 		
-		
+
 		KeyValueGroupedDataset<String, NewsArticle> newsAfterProcessor = news.groupByKey(new PreProcessNews(), Encoders.STRING());
 		
 		
