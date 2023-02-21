@@ -6,22 +6,16 @@ import org.apache.spark.SparkConf;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Encoder;
 import org.apache.spark.sql.Encoders;
-import org.apache.spark.sql.KeyValueGroupedDataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 
-import uk.ac.gla.dcs.bigdata.functions.flatmap.PlatformFilterFlatMap;
-import uk.ac.gla.dcs.bigdata.functions.map.SteamGamesToListMap;
 import uk.ac.gla.dcs.bigdata.providedfunctions.NewsFormaterMap;
 import uk.ac.gla.dcs.bigdata.providedfunctions.QueryFormaterMap;
 import uk.ac.gla.dcs.bigdata.providedstructures.DocumentRanking;
 import uk.ac.gla.dcs.bigdata.providedstructures.NewsArticle;
 import uk.ac.gla.dcs.bigdata.providedstructures.Query;
-import uk.ac.gla.dcs.bigdata.structures.SteamGameList;
-import uk.ac.gla.dcs.bigdata.structures.SteamGameStats;
-import uk.ac.gla.dcs.bigdata.studentfunctions.PreProcessNews;
-import uk.ac.gla.dcs.bigdata.studentfunctions.TextualDistanceCounter;
-import uk.ac.gla.dcs.bigdata.studentstructures.NewsArticleProcessed;
+import uk.ac.gla.dcs.bigdata.studentfunctions.NewsProcessMap;
+import uk.ac.gla.dcs.bigdata.studentstructures.NewsArticleInNeed;
 
 /**
  * This is the main class where your Spark topology should be specified.
@@ -103,7 +97,6 @@ public class AssessedExercise {
 		// Perform an initial conversion from Dataset<Row> to Query and NewsArticle Java objects
 		Dataset<Query> queries = queriesjson.map(new QueryFormaterMap(), Encoders.bean(Query.class)); // this converts each row into a Query
 		Dataset<NewsArticle> news = newsjson.map(new NewsFormaterMap(), Encoders.bean(NewsArticle.class)); // this converts each row into a NewsArticle
-		
 		//----------------------------------------------------------------
 		// Your Spark Topology should be defined here
 		//----------------------------------------------------------------
@@ -116,8 +109,8 @@ public class AssessedExercise {
 		// The map function takes as input two parameters
 		//   - A class that implements MapFunction<InputType,OutputType>
 		//   - An encoder for the output type (which we just created in the previous step)
-		Encoder<NewsArticleProcessed> NewsArticleProcessedEncoder = Encoders.bean(NewsArticleProcessed.class);
-		Dataset<NewsArticleProcessed> newsProcessed =  news.map(new PreProcessNews(), NewsArticleProcessedEncoder);
+		Encoder<NewsArticleInNeed> NewsArticleProcessedEncoder = Encoders.bean(NewsArticleInNeed.class);
+		Dataset<NewsArticleInNeed> newsProcessed =  news.map(new NewsProcessMap(), NewsArticleProcessedEncoder);
 
 //		TextualDistanceCounter similarityFilter = new TextualDistanceCounter(newsProcessed);
 //		
