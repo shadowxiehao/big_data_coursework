@@ -4,7 +4,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.spark.api.java.function.MapFunction;
-
 import uk.ac.gla.dcs.bigdata.providedstructures.ContentItem;
 import uk.ac.gla.dcs.bigdata.providedstructures.NewsArticle;
 import uk.ac.gla.dcs.bigdata.providedutilities.TextPreProcessor;
@@ -55,10 +54,27 @@ public class NewsProcessMap implements MapFunction<NewsArticle, NewsArticleInNee
 			}
 			
 		}
+		
+//		
+//		flatmap: dataset of article => flatmap => size=10 list of article
+//			
+//		Set<A> temp;  <article>
+//		int count=0;
+//		Iterator<Article> a1 = list.iterator();
+//		while (a1.next()) { // a1=list of article(sorted by dph)
+//			for i in temp:
+//				if textdistance(i, a1)>0.5：
+//					compare(dhp)
+//					temp.add(a1)
+//					count ++;
+//			if count ==10: // temp.size ==10
+//				break	
+//		}
+//		return temp; // size =10 , top 10
 			
 //		String finalResult = String.join(",", result);
 
-		return new NewsArticleInNeed(value.getId(),value.getTitle(),result);
+		return new NewsArticleInNeed(value.getId(),value.getTitle(),result, 0.0);
 	}
 	
 
