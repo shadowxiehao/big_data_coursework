@@ -10,11 +10,23 @@ public class NewsArticleInNeed implements Serializable{
 	String id; // unique article identifier
 	String title; // article title
 	List<String> paragraphContents;
+	Double dphScore;
 
-	public NewsArticleInNeed(String id, String title, List<String> paragraphContents) {
+	public NewsArticleInNeed(String id, String title, List<String> paragraphContents, Double dphScore) {
 		this.id = id;
 		this.title = title;
 		this.paragraphContents = paragraphContents;
+		this.dphScore = dphScore;
+	}
+
+
+	public Double getDphScore() {
+		return dphScore;
+	}
+
+
+	public void setDphScore(Double dphScore) {
+		this.dphScore = dphScore;
 	}
 
 
@@ -42,3 +54,4 @@ public class NewsArticleInNeed implements Serializable{
 		this.paragraphContents = paragraphContents;
 	}
 }
+
