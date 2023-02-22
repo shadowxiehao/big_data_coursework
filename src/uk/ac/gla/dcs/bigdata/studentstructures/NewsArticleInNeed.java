@@ -12,10 +12,9 @@ public class NewsArticleInNeed implements Serializable{
 	List<String> paragraphContents;
 	Double dphScore;
 
-	public NewsArticleInNeed(String id, String title, List<String> paragraphContents, Double dphScore) {
+	public NewsArticleInNeed(String id, List<String> terms, Double dphScore) {
 		this.id = id;
-		this.title = title;
-		this.paragraphContents = paragraphContents;
+		this.paragraphContents = terms;
 		this.dphScore = dphScore;
 	}
 
@@ -46,7 +45,7 @@ public class NewsArticleInNeed implements Serializable{
 		this.title = title;
 	}
 
-	public List<String> getParagraphContents() {
+	public List<String> getTerms() {
 		return paragraphContents;
 	}
 

@@ -74,7 +74,7 @@ public class NewsProcessMap implements MapFunction<NewsArticle, NewsArticleInNee
 			
 //		String finalResult = String.join(",", result);
 
-		return new NewsArticleInNeed(value.getId(),value.getTitle(),result, 0.0);
+		return new NewsArticleInNeed(value.getId(),result, 0.0);
 	}
 	
 
