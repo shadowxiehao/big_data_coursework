@@ -9,12 +9,16 @@ import org.apache.spark.sql.Encoders;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 
+import uk.ac.gla.dcs.bigdata.functions.map.SteamGamesToListMap;
 import uk.ac.gla.dcs.bigdata.providedfunctions.NewsFormaterMap;
 import uk.ac.gla.dcs.bigdata.providedfunctions.QueryFormaterMap;
 import uk.ac.gla.dcs.bigdata.providedstructures.DocumentRanking;
 import uk.ac.gla.dcs.bigdata.providedstructures.NewsArticle;
 import uk.ac.gla.dcs.bigdata.providedstructures.Query;
+import uk.ac.gla.dcs.bigdata.structures.SteamGameList;
+import uk.ac.gla.dcs.bigdata.studentfunctions.NewsArticleToListMap;
 import uk.ac.gla.dcs.bigdata.studentfunctions.NewsProcessMap;
+import uk.ac.gla.dcs.bigdata.studentstructures.NewArticleList;
 import uk.ac.gla.dcs.bigdata.studentstructures.NewsArticleInNeed;
 
 /**
@@ -112,10 +116,13 @@ public class AssessedExercise {
 		Encoder<NewsArticleInNeed> NewsArticleProcessedEncoder = Encoders.bean(NewsArticleInNeed.class);
 		Dataset<NewsArticleInNeed> newsProcessed =  news.map(new NewsProcessMap(), NewsArticleProcessedEncoder);
 
-//		TextualDistanceCounter similarityFilter = new TextualDistanceCounter(newsProcessed);
+		Encoder<NewArticleList> newsArticleListEncoder = Encoders.bean(NewArticleList.class);
+		Dataset<NewArticleList> newsAsLists =  newsProcessed.map(new NewsArticleToListMap(), newsArticleListEncoder);
+//		TextualDistanceCounter similarityFilter = new TextualDistanceCounter();
+//		NewArticleList newsLIst = new NewArticleList(newsProcessed);
 //		
-//		Dataset<NewsArticle> filterdNewsArticles = newsProcessed.flatMapGroups(similarityFilter, Encoders.bean(NewsArticle.class));
-//		
+		// Dataset<NewsArticle> filterdNewsArticles = newsProcessed.reduce(similarityFilter, Encoders.bean(NewsArticle.class));
+		
 		return null; // replace this with the the list of DocumentRanking output by your topology
 	}
 	
