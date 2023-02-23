@@ -17,6 +17,9 @@ public class NewsArticleInNeed implements Serializable{
 		this.dphScore = dphScore;
 	}
 
+	public NewsArticleInNeed() {
+	}
+
 
 	public Double getDphScore() {
 		return dphScore;

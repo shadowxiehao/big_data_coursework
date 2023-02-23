@@ -28,6 +28,9 @@ public class DPHInNeed implements Serializable {
         this.documentCount = documentCount;
     }
 
+    public DPHInNeed() {
+    }
+
     public String getId() {
         return id;
     }

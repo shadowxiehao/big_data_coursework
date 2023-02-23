@@ -1,6 +1,7 @@
 package uk.ac.gla.dcs.bigdata.studentfunctions;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -27,13 +28,13 @@ public class NewsProcessMap implements FlatMapFunction<NewsArticle, NewsArticleI
 		String title = value.getTitle();
 		List<String> newTitleString = null;
 		if(title==null||title.isBlank()){
-			newTitleString = new ArrayList<String>();
+
 		}else {
 			newTitleString = processor.process(title);
 		}
 
 		// store the processed title into result 
-		List<String> result = newTitleString;
+		List<String> result = (newTitleString==null||newTitleString.isEmpty())?(new ArrayList<String>()):newTitleString;
 		
 		// get the value of contents of NewsArticle
 		List<ContentItem> contents = value.getContents();
@@ -62,9 +63,10 @@ public class NewsProcessMap implements FlatMapFunction<NewsArticle, NewsArticleI
 				break;
 			}
 		}
-		if (count == 0 || result.size()==0) {
-			List<NewsArticleInNeed> nlist = new ArrayList<NewsArticleInNeed>(0);
-			return nlist.iterator();
+		if (count == 0 || result.isEmpty()) {
+//			List<NewsArticleInNeed> nlist = new ArrayList<NewsArticleInNeed>(0);
+//			return nlist.iterator();
+			return Collections.emptyIterator();
 		}
 		List<NewsArticleInNeed> nlist = new ArrayList<NewsArticleInNeed>(1);
 		nlist.add(new NewsArticleInNeed(value.getId(),result, 0.0));

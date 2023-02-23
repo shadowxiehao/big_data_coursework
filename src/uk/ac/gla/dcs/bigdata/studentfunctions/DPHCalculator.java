@@ -20,7 +20,7 @@ public class DPHCalculator {
         DPHInNeedMap dphInNeedMap = new DPHInNeedMap(queryTerms);
 
         Encoder<DPHInNeed> dPHInNeedEncoder = Encoders.bean(DPHInNeed.class);
-        Dataset<DPHInNeed> dphInNeedDataset = newsArticleInNeed.map(dphInNeedMap,dPHInNeedEncoder);
+        Dataset<DPHInNeed> dphInNeedDataset = newsArticleInNeed.flatMap(dphInNeedMap,dPHInNeedEncoder);
 
         //--calculate: The average document length in the corpus (in terms),The sum of term frequencies for the term across all documents,The total number of documents in the corpus
         DPHInNeed reducerResult = dphInNeedDataset.reduce(new DPHInNeedReducer());

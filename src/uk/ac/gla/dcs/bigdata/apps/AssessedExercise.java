@@ -40,7 +40,8 @@ public class AssessedExercise {
 		
 		// The code submitted for the assessed exerise may be run in either local or remote modes
 		// Configuration of this will be performed based on an environment variable
-		String sparkMasterDef = System.getenv("spark.master");
+//		String sparkMasterDef = System.getenv("spark.master");
+		String sparkMasterDef = System.getenv("spark.local");
 		if (sparkMasterDef==null) sparkMasterDef = "local[2]"; // default is local mode with two executors
 		
 		String sparkSessionName = "BigDataAE"; // give the session a name
@@ -101,6 +102,8 @@ public class AssessedExercise {
 		// Perform an initial conversion from Dataset<Row> to Query and NewsArticle Java objects
 		Dataset<Query> queries = queriesjson.map(new QueryFormaterMap(), Encoders.bean(Query.class)); // this converts each row into a Query
 		Dataset<NewsArticle> news = newsjson.map(new NewsFormaterMap(), Encoders.bean(NewsArticle.class)); // this converts each row into a NewsArticle
+		List<NewsArticle> newsArticlel = news.collectAsList();
+
 		//----------------------------------------------------------------
 		// Your Spark Topology should be defined here
 		//----------------------------------------------------------------
