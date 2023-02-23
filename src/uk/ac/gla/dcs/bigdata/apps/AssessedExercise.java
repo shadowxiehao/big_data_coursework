@@ -101,7 +101,6 @@ public class AssessedExercise {
 		// Perform an initial conversion from Dataset<Row> to Query and NewsArticle Java objects
 		Dataset<Query> queries = queriesjson.map(new QueryFormaterMap(), Encoders.bean(Query.class)); // this converts each row into a Query
 		Dataset<NewsArticle> news = newsjson.map(new NewsFormaterMap(), Encoders.bean(NewsArticle.class)); // this converts each row into a NewsArticle
-		List<NewsArticle> newsArticlel = news.collectAsList();
 
 		//----------------------------------------------------------------
 		// Your Spark Topology should be defined here
