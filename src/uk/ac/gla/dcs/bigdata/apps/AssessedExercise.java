@@ -16,8 +16,7 @@ import uk.ac.gla.dcs.bigdata.providedstructures.NewsArticle;
 import uk.ac.gla.dcs.bigdata.providedstructures.Query;
 import uk.ac.gla.dcs.bigdata.studentfunctions.DPHCalculator;
 import uk.ac.gla.dcs.bigdata.studentfunctions.NewsProcessMap;
-import uk.ac.gla.dcs.bigdata.studentfunctions.TextualDistanceCounter;
-import uk.ac.gla.dcs.bigdata.studentstructures.DPHInNeed;
+import uk.ac.gla.dcs.bigdata.studentfunctions.TextualDistanceReducer;
 import uk.ac.gla.dcs.bigdata.studentstructures.NewsArticleList;
 import uk.ac.gla.dcs.bigdata.studentstructures.NewsArticleInNeed;
 
@@ -122,10 +121,12 @@ public class AssessedExercise {
 
 		for (Query query:queries.collectAsList()) {
 			Dataset<NewsArticleList> newsAsLists = DPHCalculator.calculateDPHScore(query.getQueryTerms(),newsArticleInNeed);
-			TextualDistanceCounter similarityFilter = new TextualDistanceCounter();
+			TextualDistanceReducer similarityFilter = new TextualDistanceReducer();
 			NewsArticleList filterdNewsArticles = newsAsLists.reduce(similarityFilter);
+			List<NewsArticleInNeed> result = filterdNewsArticles.getNewsList().subList(0,10);
 
 			System.out.println("size is:"+filterdNewsArticles.getNewsList().size());
+			System.out.println("size of result is:"+result.size());
 		}
 
 

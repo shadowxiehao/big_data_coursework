@@ -2,6 +2,7 @@ package uk.ac.gla.dcs.bigdata.studentfunctions;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -11,12 +12,17 @@ import uk.ac.gla.dcs.bigdata.studentstructures.NewsArticleList;
 import uk.ac.gla.dcs.bigdata.studentstructures.NewsArticleInNeed;
 
 
-public class TextualDistanceCounter implements ReduceFunction<NewsArticleList>{
+public class TextualDistanceReducer implements ReduceFunction<NewsArticleList>{
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -6219052801635837096L;
+
+	/**
+	 * 
+	 */
+
 	                                                                                                                            
 
 	// textual distance(reduce duplication)(provided->TextDistanceCalculator.java) 
@@ -53,10 +59,21 @@ public class TextualDistanceCounter implements ReduceFunction<NewsArticleList>{
 	    }
 	    temp.addAll(n1.getNewsList());
 	    temp.addAll(n2.getNewsList());
-	    comparatorOfDHPScore comparator = new comparatorOfDHPScore();
-	    Collections.sort(temp, comparator);
-	    List<NewsArticleInNeed> firstTen = temp.subList(0, Math.min(temp.size(), 10));
-	    NewsArticleList result =  new NewsArticleList(firstTen);
+	    Collections.sort(temp, new Comparator<NewsArticleInNeed>() {
+	        public int compare(NewsArticleInNeed n1, NewsArticleInNeed n2) {
+	            return n2.getDphScore().compareTo(n1.getDphScore());
+	        }
+	    });
+//	    comparatorOfDHPScore comparator = new comparatorOfDHPScore();
+//	    Collections.sort(temp, comparator);
+	     // List<NewsArticleInNeed> firstTen = temp.subList(0, Math.min(temp.size(), 10));
+	    NewsArticleList result =  new NewsArticleList(temp);
+	    
+//	    if (temp.size()<= 10){
+//	    	return new NewsArticleList(temp);
+//	    }
+//
+//	    return new NewsArticleList(temp.subList(0,10));
 	    
 	    return result;
 	    
