@@ -7,11 +7,11 @@ import java.util.List;
 
 import org.apache.spark.api.java.function.ReduceFunction;
 import uk.ac.gla.dcs.bigdata.providedutilities.TextDistanceCalculator;
-import uk.ac.gla.dcs.bigdata.studentstructures.NewArticleList;
+import uk.ac.gla.dcs.bigdata.studentstructures.NewsArticleList;
 import uk.ac.gla.dcs.bigdata.studentstructures.NewsArticleInNeed;
 
 
-public class TextualDistanceCounter implements ReduceFunction<NewArticleList>{
+public class TextualDistanceCounter implements ReduceFunction<NewsArticleList>{
 
 	/**
 	 * 
@@ -20,7 +20,7 @@ public class TextualDistanceCounter implements ReduceFunction<NewArticleList>{
 	                                                                                                                            
 
 	// textual distance(reduce duplication)(provided->TextDistanceCalculator.java) 
-	public NewArticleList call(NewArticleList n1, NewArticleList n2) throws Exception {
+	public NewsArticleList call(NewsArticleList n1, NewsArticleList n2) throws Exception {
 		List<NewsArticleInNeed> temp = new ArrayList<NewsArticleInNeed>(); 
 		
 	    Iterator<NewsArticleInNeed> iteratorN1 = n1.getNewsList().iterator();
@@ -56,7 +56,7 @@ public class TextualDistanceCounter implements ReduceFunction<NewArticleList>{
 	    comparatorOfDHPScore comparator = new comparatorOfDHPScore();
 	    Collections.sort(temp, comparator);
 	    List<NewsArticleInNeed> firstTen = temp.subList(0, Math.min(temp.size(), 10));
-	    NewArticleList result =  new NewArticleList(firstTen);
+	    NewsArticleList result =  new NewsArticleList(firstTen);
 	    
 	    return result;
 	    

@@ -14,10 +14,11 @@ import uk.ac.gla.dcs.bigdata.providedfunctions.QueryFormaterMap;
 import uk.ac.gla.dcs.bigdata.providedstructures.DocumentRanking;
 import uk.ac.gla.dcs.bigdata.providedstructures.NewsArticle;
 import uk.ac.gla.dcs.bigdata.providedstructures.Query;
-import uk.ac.gla.dcs.bigdata.studentfunctions.NewsArticleToListMap;
+import uk.ac.gla.dcs.bigdata.studentfunctions.DPHCalculator;
 import uk.ac.gla.dcs.bigdata.studentfunctions.NewsProcessMap;
 import uk.ac.gla.dcs.bigdata.studentfunctions.TextualDistanceCounter;
-import uk.ac.gla.dcs.bigdata.studentstructures.NewArticleList;
+import uk.ac.gla.dcs.bigdata.studentstructures.DPHInNeed;
+import uk.ac.gla.dcs.bigdata.studentstructures.NewsArticleList;
 import uk.ac.gla.dcs.bigdata.studentstructures.NewsArticleInNeed;
 
 /**
@@ -113,14 +114,18 @@ public class AssessedExercise {
 		//   - A class that implements MapFunction<InputType,OutputType>
 		//   - An encoder for the output type (which we just created in the previous step)
 		Encoder<NewsArticleInNeed> NewsArticleProcessedEncoder = Encoders.bean(NewsArticleInNeed.class);
-		Dataset<NewsArticleInNeed> newsProcessed =  news.map(new NewsProcessMap(), NewsArticleProcessedEncoder);
+		Dataset<NewsArticleInNeed> newsArticleInNeed =  news.flatMap(new NewsProcessMap(), NewsArticleProcessedEncoder);
+		List<NewsArticleInNeed> listinneed = newsArticleInNeed.collectAsList();
 
-		Encoder<NewArticleList> newsArticleListEncoder = Encoders.bean(NewArticleList.class);
-		Dataset<NewArticleList> newsAsLists =  newsProcessed.map(new NewsArticleToListMap(), newsArticleListEncoder);
-		
-		TextualDistanceCounter similarityFilter = new TextualDistanceCounter();
-		NewArticleList filterdNewsArticles = newsAsLists.reduce(similarityFilter);
-		
+		for (Query query:queries.collectAsList()) {
+			Dataset<NewsArticleList> newsAsLists = DPHCalculator.calculateDPHScore(query.getQueryTerms(),newsArticleInNeed);
+			TextualDistanceCounter similarityFilter = new TextualDistanceCounter();
+			NewsArticleList filterdNewsArticles = newsAsLists.reduce(similarityFilter);
+
+			System.out.println("size is:"+filterdNewsArticles.getNewsList().size());
+		}
+
+
 		return null; // replace this with the the list of DocumentRanking output by your topology
 	}
 	

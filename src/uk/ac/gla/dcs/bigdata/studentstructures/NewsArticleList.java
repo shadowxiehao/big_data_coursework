@@ -3,14 +3,10 @@ package uk.ac.gla.dcs.bigdata.studentstructures;
 import java.io.Serializable;
 import java.util.List;
 
-public class NewArticleList implements Serializable{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 3927072645124392638L;
+public class NewsArticleList implements Serializable{
+
+	private static final long serialVersionUID = 1L;
 	List<NewsArticleInNeed> newsList;
-	
-	public NewArticleList() {};
 	
 	public List<NewsArticleInNeed> getNewsList() {
 		return newsList;
@@ -20,11 +16,8 @@ public class NewArticleList implements Serializable{
 		this.newsList = newsList;
 	}
 
-	public NewArticleList(List<NewsArticleInNeed> newsProcessed) {
-		super();
-		this.newsList = newsProcessed;
+	public NewsArticleList(List<NewsArticleInNeed> newsArticleInNeedList) {
+		this.newsList = newsArticleInNeedList;
 	}
-
-
 
 }

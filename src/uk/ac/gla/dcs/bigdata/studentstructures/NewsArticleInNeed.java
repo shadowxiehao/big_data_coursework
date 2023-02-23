@@ -8,13 +8,12 @@ public class NewsArticleInNeed implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	String id; // unique article identifier
-	String title; // article title
-	List<String> paragraphContents;
+	List<String> terms;
 	Double dphScore;
 
 	public NewsArticleInNeed(String id, List<String> terms, Double dphScore) {
 		this.id = id;
-		this.paragraphContents = terms;
+		this.terms = terms;
 		this.dphScore = dphScore;
 	}
 
@@ -37,20 +36,13 @@ public class NewsArticleInNeed implements Serializable{
 		this.id = id;
 	}
 
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
 
 	public List<String> getTerms() {
-		return paragraphContents;
+		return terms;
 	}
 
-	public void setParagraphContents(List<String> paragraphContents) {
-		this.paragraphContents = paragraphContents;
+	public void setParagraphContents(List<String> terms) {
+		this.terms = terms;
 	}
 }
 
