@@ -28,7 +28,7 @@ public class TextualDistanceReducer implements ReduceFunction<NewsArticleList>{
 	// textual distance(reduce duplication)(provided->TextDistanceCalculator.java) 
 	public NewsArticleList call(NewsArticleList n1, NewsArticleList n2) throws Exception {
 		List<NewsArticleInNeed> temp = new ArrayList<NewsArticleInNeed>(); 
-		
+
 	    Iterator<NewsArticleInNeed> iteratorN1 = n1.getNewsList().iterator();
 	    Iterator<NewsArticleInNeed> iteratorN2 = n2.getNewsList().iterator();
 	    while (iteratorN1.hasNext()) {
@@ -49,25 +49,26 @@ public class TextualDistanceReducer implements ReduceFunction<NewsArticleList>{
 	    			  // temp.add(newsN2);
 	    			  iteratorN1.remove();
 	    		  }
-	    	  } 
+	    	  }
 //	    	  else {
 //	    		  temp.add(newsN1);
 //	    		  temp.add(newsN2);
 //	    	  }
-	    	  
+
 	      }
 	    }
 	    temp.addAll(n1.getNewsList());
 	    temp.addAll(n2.getNewsList());
-	    Collections.sort(temp, new Comparator<NewsArticleInNeed>() {
-	        public int compare(NewsArticleInNeed n1, NewsArticleInNeed n2) {
-	            return n2.getDphScore().compareTo(n1.getDphScore());
-	        }
-	    });
+	    temp.sort(new Comparator<NewsArticleInNeed>() {
+			public int compare(NewsArticleInNeed n1, NewsArticleInNeed n2) {
+				return n2.getDphScore().compareTo(n1.getDphScore());
+			}
+		});
 //	    comparatorOfDHPScore comparator = new comparatorOfDHPScore();
 //	    Collections.sort(temp, comparator);
-	     // List<NewsArticleInNeed> firstTen = temp.subList(0, Math.min(temp.size(), 10));
-	    NewsArticleList result =  new NewsArticleList(temp);
+
+		List<NewsArticleInNeed> firstTen = new ArrayList<>(temp.subList(0, Math.min(temp.size(), 10))) ;
+	    NewsArticleList result =  new NewsArticleList(firstTen);
 	    
 //	    if (temp.size()<= 10){
 //	    	return new NewsArticleList(temp);
@@ -76,7 +77,7 @@ public class TextualDistanceReducer implements ReduceFunction<NewsArticleList>{
 //	    return new NewsArticleList(temp.subList(0,10));
 	    
 	    return result;
-	    
+
 
 //	   
 //	    return result;

@@ -39,9 +39,9 @@ public class AssessedExercise {
 		
 		// The code submitted for the assessed exerise may be run in either local or remote modes
 		// Configuration of this will be performed based on an environment variable
-//		String sparkMasterDef = System.getenv("spark.master");
-		String sparkMasterDef = System.getenv("spark.local");
-		if (sparkMasterDef==null) sparkMasterDef = "local[2]"; // default is local mode with two executors
+		String sparkMasterDef = System.getenv("spark.master");
+//		String sparkMasterDef = System.getenv("spark.local");
+		if (sparkMasterDef==null) sparkMasterDef = "local[10]"; // default is local mode with two executors
 		
 		String sparkSessionName = "BigDataAE"; // give the session a name
 		
@@ -123,7 +123,7 @@ public class AssessedExercise {
 			Dataset<NewsArticleList> newsAsLists = DPHCalculator.calculateDPHScore(query.getQueryTerms(),newsArticleInNeed);
 			TextualDistanceReducer similarityFilter = new TextualDistanceReducer();
 			NewsArticleList filterdNewsArticles = newsAsLists.reduce(similarityFilter);
-			List<NewsArticleInNeed> result = filterdNewsArticles.getNewsList().subList(0,10);
+			List<NewsArticleInNeed> result = filterdNewsArticles.getNewsList();
 
 			System.out.println("size is:"+filterdNewsArticles.getNewsList().size());
 			System.out.println("size of result is:"+result.size());
