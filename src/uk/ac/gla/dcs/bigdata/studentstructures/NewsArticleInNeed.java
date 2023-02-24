@@ -1,66 +1,50 @@
-
 package uk.ac.gla.dcs.bigdata.studentstructures;
+
 import java.io.Serializable;
 import java.util.List;
 
-public class NewsArticleList implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    List<NewsArticleInNeed> newsList;
+public class NewsArticleInNeed implements Serializable{
 
-    public NewsArticleList() {
-    }
+	private static final long serialVersionUID = 1L;
+	String id; // unique article identifier
+	List<String> terms;
+	Double dphScore;
 
-    public NewsArticleList(List<NewsArticleInNeed> newsArticleInNeedList) {
-        this.newsList = newsArticleInNeedList;
-    }
+	public NewsArticleInNeed(String id, List<String> terms, Double dphScore) {
+		this.id = id;
+		this.terms = terms;
+		this.dphScore = dphScore;
+	}
 
-    public List<NewsArticleInNeed> getNewsList() {
-        return newsList;
-    }
+	public NewsArticleInNeed() {
+	}
 
-    public void setNewsList(List<NewsArticleInNeed> newsList) {
-        this.newsList = newsList;
-    }
 
-    public static class NewsArticleInNeed implements Serializable {
+	public Double getDphScore() {
+		return dphScore;
+	}
 
-        private static final long serialVersionUID = 1L;
-        String id; // unique article identifier
-        List<String> terms;
-        Double dphScore;
 
-        public NewsArticleInNeed(String id, List<String> terms, Double dphScore) {
-            this.id = id;
-            this.terms = terms;
-            this.dphScore = dphScore;
-        }
+	public void setDphScore(Double dphScore) {
+		this.dphScore = dphScore;
+	}
 
-        public NewsArticleInNeed() {
-        }
 
-        public Double getDphScore() {
-            return dphScore;
-        }
+	public String getId() {
+		return id;
+	}
 
-        public void setDphScore(Double dphScore) {
-            this.dphScore = dphScore;
-        }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-        public String getId() {
-            return id;
-        }
 
-        public void setId(String id) {
-            this.id = id;
-        }
+	public List<String> getTerms() {
+		return terms;
+	}
 
-        public List<String> getTerms() {
-            return terms;
-        }
-
-        public void setTerms(List<String> terms) {
-            this.terms = terms;
-        }
-    }
+	public void setParagraphContents(List<String> terms) {
+		this.terms = terms;
+	}
 }
