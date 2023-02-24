@@ -1,6 +1,7 @@
 package uk.ac.gla.dcs.bigdata.apps;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import org.apache.spark.SparkConf;
 import org.apache.spark.sql.Dataset;
@@ -14,8 +15,10 @@ import uk.ac.gla.dcs.bigdata.providedfunctions.QueryFormaterMap;
 import uk.ac.gla.dcs.bigdata.providedstructures.DocumentRanking;
 import uk.ac.gla.dcs.bigdata.providedstructures.NewsArticle;
 import uk.ac.gla.dcs.bigdata.providedstructures.Query;
+import uk.ac.gla.dcs.bigdata.providedstructures.RankedResult;
 import uk.ac.gla.dcs.bigdata.studentfunctions.DPHCalculator;
 import uk.ac.gla.dcs.bigdata.studentfunctions.NewsProcessMap;
+import uk.ac.gla.dcs.bigdata.studentfunctions.RankedResultMap;
 import uk.ac.gla.dcs.bigdata.studentfunctions.TextualDistanceReducer;
 import uk.ac.gla.dcs.bigdata.studentstructures.NewsArticleList;
 import uk.ac.gla.dcs.bigdata.studentstructures.NewsArticleInNeed;
@@ -31,7 +34,6 @@ import uk.ac.gla.dcs.bigdata.studentstructures.NewsArticleInNeed;
  */
 public class AssessedExercise {
 
-	
 	public static void main(String[] args) {
 		
 		File hadoopDIR = new File("resources/hadoop/"); // represent the hadoop directory as a Java file so we can get an absolute path for it
@@ -87,13 +89,11 @@ public class AssessedExercise {
 			}
 		}
 		
-		
 	}
 	
 	
-	
 	public static List<DocumentRanking> rankDocuments(SparkSession spark, String queryFile, String newsFile) {
-		
+		long startTime = System.currentTimeMillis();//time counter
 		// Load queries and news articles
 		Dataset<Row> queriesjson = spark.read().text(queryFile);
 		Dataset<Row> newsjson = spark.read().text(newsFile); // read in files as string rows, one row per article
@@ -105,31 +105,29 @@ public class AssessedExercise {
 		//----------------------------------------------------------------
 		// Your Spark Topology should be defined here
 		//----------------------------------------------------------------
-		
 
-		// KeyValueGroupedDataset<String, NewsArticle> newsAfterProcessor = news.groupByKey(new PreProcessNews(), Encoders.STRING());
-		
-		// In Spark, data tranformations are specified by calling transformation functions on Datasets
-		// The most basic transformation is 'map', this converts each item in the dataset to a new item (that may be of a different type)
-		// The map function takes as input two parameters
-		//   - A class that implements MapFunction<InputType,OutputType>
-		//   - An encoder for the output type (which we just created in the previous step)
 		Encoder<NewsArticleInNeed> NewsArticleProcessedEncoder = Encoders.bean(NewsArticleInNeed.class);
 		Dataset<NewsArticleInNeed> newsArticleInNeed =  news.flatMap(new NewsProcessMap(), NewsArticleProcessedEncoder);
-		List<NewsArticleInNeed> listinneed = newsArticleInNeed.collectAsList();
 
+		List<DocumentRanking> documentRankingList = new ArrayList<>();
 		for (Query query:queries.collectAsList()) {
+
 			Dataset<NewsArticleList> newsAsLists = DPHCalculator.calculateDPHScore(query.getQueryTerms(),newsArticleInNeed);
 			TextualDistanceReducer similarityFilter = new TextualDistanceReducer();
 			NewsArticleList filterdNewsArticles = newsAsLists.reduce(similarityFilter);
-			List<NewsArticleInNeed> result = filterdNewsArticles.getNewsList();
+			List<NewsArticleInNeed> results = filterdNewsArticles.getNewsList();
 
-			System.out.println("size is:"+filterdNewsArticles.getNewsList().size());
-			System.out.println("size of result is:"+result.size());
+			RankedResultMap rankedResultMap = new RankedResultMap(results);
+			Dataset<RankedResult> rankedResultDataset = news.flatMap(rankedResultMap,Encoders.bean(RankedResult.class));
+			documentRankingList.add(new DocumentRanking(query,rankedResultDataset.collectAsList()));
 		}
 
+		//log the computation
+		long endTime = System.currentTimeMillis();
+		long timeElapsed = endTime - startTime;
+		System.out.println("total_time:"+timeElapsed+"(millisecond)"+"\n"+"documentRankingList:"+"\n"+documentRankingList);
 
-		return null; // replace this with the the list of DocumentRanking output by your topology
+		return documentRankingList; // replace this with the the list of DocumentRanking output by your topology
 	}
 	
 	
