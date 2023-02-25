@@ -3,14 +3,19 @@ package uk.ac.gla.dcs.bigdata.studentstructures;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * This is a class representing a java object that contains NewsArticle id and corresponding
+ * data for calculating DHP score for it. 
+ */
+
 public class DPHInNeed implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String id; // unique article identifier
-    private List<String> terms;//origin terms
-    private int termFrequency;
-    private int documentLength;
-    private Long documentCount;
+    private List<String> terms; // origin terms
+    private int termFrequency; // (count) of the term in the document
+    private int documentLength; // The length of the document (in terms)
+    private Long documentCount; // count of document
 
     public DPHInNeed(String id, List<String> terms,int termFrequency, int documentLength ) {
         this.id = id;
@@ -51,7 +56,7 @@ public class DPHInNeed implements Serializable {
     }
 
     public void setTermFrequency(int termFrequency) {
-        termFrequency = termFrequency;
+        this.termFrequency = termFrequency;
     }
 
     public int getDocumentlength() {
@@ -59,7 +64,7 @@ public class DPHInNeed implements Serializable {
     }
 
     public void setDocumentlength(int documentlength) {
-        documentLength = documentlength;
+        this.documentLength = documentlength;
     }
 
     public Long getDocumentCount() {
@@ -67,7 +72,7 @@ public class DPHInNeed implements Serializable {
     }
 
     public void setDocumentCount(Long documentCount) {
-        documentCount = documentCount;
+        this.documentCount = documentCount;
     }
 
 }

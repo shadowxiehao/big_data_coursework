@@ -35,13 +35,5 @@ public class DPHInNeedMap implements MapFunction<NewsArticleInNeed, DPHInNeed> {
         int documentLength = documentTerms.size();
 
         return new DPHInNeed(newsArticleInNeed.getId(),newsArticleInNeed.getTerms(),termCount,documentLength);
-
-//        if(documentLength==0||termCount==0){
-//            return Collections.emptyIterator();
-//        }
-
-//        List<DPHInNeed> dphInNeeds = new ArrayList<>(1);
-//        dphInNeeds.add(new DPHInNeed(newsArticleInNeed.getId(),newsArticleInNeed.getTerms(),termCount,documentLength));
-//        return dphInNeeds.iterator();
     }
 }
