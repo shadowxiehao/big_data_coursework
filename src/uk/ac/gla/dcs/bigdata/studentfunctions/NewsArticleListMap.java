@@ -53,7 +53,7 @@ public class NewsArticleListMap implements FlatMapFunction<DPHInNeed, TextualDis
         if (validTerm == 0) {
             return Collections.emptyIterator();
         }
-        dphScore /= validTerm;
+        dphScore /= dPHInNeed.getTermFrequencyList().size();
 
         //put the score in the data, and return as a single list.
         String titleString = dPHInNeed.getTerms().stream().limit(dPHInNeed.getTitleLength()).collect(Collectors.joining(" "));
