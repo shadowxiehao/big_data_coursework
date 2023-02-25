@@ -2,10 +2,13 @@ package uk.ac.gla.dcs.bigdata.studentfunctions;
 
 import org.apache.spark.api.java.function.ReduceFunction;
 import uk.ac.gla.dcs.bigdata.studentstructures.DPHInNeed;
-
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+/**
+ * This class is a mapping function that maps NewsArticleInNeed to DPHInNeed. 
+ */
 
 public class DPHInNeedReducer implements ReduceFunction<DPHInNeed> {
     private static final long serialVersionUID = 1L;

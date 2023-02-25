@@ -14,7 +14,7 @@ public class NewsArticleInNeed implements Serializable {
     private static final long serialVersionUID = 1L;
     String id; // unique article identifier
     List<String> terms; // first five paragraphs of content and title of article after pre-process
-    int titleLength; //record the title position in the terms
+    int titleLength; // record the title position in the terms
     Double dphScore; // DPH score of article
 
     public NewsArticleInNeed(String id, List<String> terms, int titleLength, Double dphScore) {

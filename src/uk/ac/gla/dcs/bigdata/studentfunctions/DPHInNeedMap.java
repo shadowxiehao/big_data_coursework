@@ -4,11 +4,15 @@ import org.apache.spark.api.java.function.MapFunction;
 import org.apache.spark.broadcast.Broadcast;
 import uk.ac.gla.dcs.bigdata.studentstructures.DPHInNeed;
 import uk.ac.gla.dcs.bigdata.studentstructures.NewsArticleInNeed;
-
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class is a mapping function that maps NewsArticleInNeed to DPHInNeed. 
+ */
+
 public class DPHInNeedMap implements MapFunction<NewsArticleInNeed, DPHInNeed> {
+	
     private static final long serialVersionUID = 1L;
     private final List<String> queryTerms;
 
