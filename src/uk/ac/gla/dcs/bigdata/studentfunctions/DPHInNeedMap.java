@@ -1,6 +1,7 @@
 package uk.ac.gla.dcs.bigdata.studentfunctions;
 
 import org.apache.spark.api.java.function.MapFunction;
+import org.apache.spark.broadcast.Broadcast;
 import uk.ac.gla.dcs.bigdata.studentstructures.DPHInNeed;
 import uk.ac.gla.dcs.bigdata.studentstructures.NewsArticleInNeed;
 
@@ -11,8 +12,8 @@ public class DPHInNeedMap implements MapFunction<NewsArticleInNeed, DPHInNeed> {
     private static final long serialVersionUID = 1L;
     private final List<String> queryTerms;
 
-    public DPHInNeedMap(List<String> queryTerms) {
-        this.queryTerms = queryTerms;
+    public DPHInNeedMap(Broadcast<List<String>> queryTerms) {
+        this.queryTerms = queryTerms.getValue();
     }
 
 

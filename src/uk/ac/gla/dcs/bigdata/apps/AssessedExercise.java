@@ -41,7 +41,7 @@ public class AssessedExercise {
         // Configuration of this will be performed based on an environment variable
         String sparkMasterDef = System.getenv("spark.master");
 //		String sparkMasterDef = System.getenv("spark.local");
-        if (sparkMasterDef == null) sparkMasterDef = "local[10]"; // default is local mode with two executors
+        if (sparkMasterDef == null) sparkMasterDef = "local[*]"; // default is local mode with two executors
 
         String sparkSessionName = "BigDataAE"; // give the session a name
 
@@ -49,16 +49,18 @@ public class AssessedExercise {
         SparkConf conf = new SparkConf()
                 .setMaster(sparkMasterDef)
                 .setAppName(sparkSessionName)
+//                .set("spark.local.dir", "temp")
 //                .set("spark.eventLog.enabled", "true")
 //                .set("spark.eventLog.dir", "temp")
                 ;
+//        JavaSparkContext sc = new JavaSparkContext(conf);
+//        sc.setCheckpointDir("temp");
 
         // Create the spark session
         SparkSession spark = SparkSession
                 .builder()
                 .config(conf)
                 .getOrCreate();
-
 
         // Get the location of the input queries
         String queryFile = System.getenv("bigdata.queries");
@@ -115,15 +117,19 @@ public class AssessedExercise {
         Encoder<NewsArticleInNeed> NewsArticleProcessedEncoder = Encoders.bean(NewsArticleInNeed.class);
         Dataset<NewsArticleInNeed> newsArticleInNeed = news.flatMap(new NewsProcessMap(), NewsArticleProcessedEncoder);
 
+//        newsArticleInNeed.persist(StorageLevel.MEMORY_AND_DISK_SER());
+
         // create a empty list of DocumentRanking
         List<DocumentRanking> documentRankingList = new ArrayList<>();
+
         // for each query, rank the text documents by relevance for that query, as well as filter out any overly similar documents in the final ranking,
         // and return top 10 documents
+
         for (Query query : queries.collectAsList()) {
 
             // use query terms and NewsArticleInNeed dataset calculate the DPH score of each NewsArticle
             // store result into a dataset of NewsArticleList called newsAsLists
-            Dataset<NewsArticleList> newsAsLists = DPHCalculator.calculateDPHScore(query.getQueryTerms(), newsArticleInNeed);
+            Dataset<NewsArticleList> newsAsLists = DPHCalculator.calculateDPHScore(spark, query.getQueryTerms(), newsArticleInNeed);
 
             // create a filter to reduce the duplication of similar documents
             TextualDistanceReducer similarityFilter = new TextualDistanceReducer();
@@ -147,6 +153,10 @@ public class AssessedExercise {
             documentRankingList.add(new DocumentRanking(query, rankedResults));
         }
 
+//        QueryMap queryMap = new QueryMap(news, newsArticleInNeed);
+//        Dataset<DocumentRanking> rankedResultDataset = queries.map(queryMap, Encoders.bean(DocumentRanking.class));
+//        documentRankingList = rankedResultDataset.collectAsList();
+
         // log the computation, print the documentRankingList
         long endTime = System.currentTimeMillis();
         long timeElapsed = endTime - startTime;
@@ -161,6 +171,5 @@ public class AssessedExercise {
         // return the output 
         return documentRankingList;
     }
-
 
 }

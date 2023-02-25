@@ -2,6 +2,6 @@ target
 bin
 .settings
 results
-temp
+temp/*
 .classpath
 Notes.docx

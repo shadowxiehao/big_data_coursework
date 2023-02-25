@@ -1,8 +1,10 @@
 package uk.ac.gla.dcs.bigdata.studentfunctions;
 
+import org.apache.spark.broadcast.Broadcast;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Encoder;
 import org.apache.spark.sql.Encoders;
+import org.apache.spark.sql.SparkSession;
 import uk.ac.gla.dcs.bigdata.studentstructures.DPHInNeed;
 import uk.ac.gla.dcs.bigdata.studentstructures.NewsArticleInNeed;
 import uk.ac.gla.dcs.bigdata.studentstructures.NewsArticleList;
@@ -18,14 +20,17 @@ import java.util.List;
  */
 
 /**
- * 	get DPH score(calculate relevance)(provided->DPHScorer.java) , connect with document and query
+ * get DPH score(calculate relevance)(provided->DPHScorer.java) , connect with document and query
  */
 public class DPHCalculator {
 
-    public static Dataset<NewsArticleList> calculateDPHScore(List<String> queryTerms, Dataset<NewsArticleInNeed> newsArticleInNeed) {
+    public static Dataset<NewsArticleList> calculateDPHScore(SparkSession spark, List<String> queryTerms, Dataset<NewsArticleInNeed> newsArticleInNeed) {
+
+        //将 queryTerms 广播到所有节点，避免每次运行 calculateDPHScore 方法时都需要传输一次 queryTerms
+        Broadcast<List<String>> queryTermsBroadcast = spark.sparkContext().broadcast(queryTerms, scala.reflect.ClassTag$.MODULE$.apply(List.class));
 
         //--calculate both the TermFrequency (count of the term in the document) and the length of the document (in terms)
-        DPHInNeedMap dphInNeedMap = new DPHInNeedMap(queryTerms);
+        DPHInNeedMap dphInNeedMap = new DPHInNeedMap(queryTermsBroadcast);
 
         Encoder<DPHInNeed> dPHInNeedEncoder = Encoders.bean(DPHInNeed.class);
         Dataset<DPHInNeed> dphInNeedDataset = newsArticleInNeed.map(dphInNeedMap, dPHInNeedEncoder);
@@ -50,6 +55,5 @@ public class DPHCalculator {
         // map the result to 
         return dphInNeedDataset.flatMap(newsArticleListMap, newsArticleListEncoder);
     }
-
 
 }
