@@ -5,7 +5,7 @@ import java.util.List;
 
 /**
  * This is a class representing a java object that contains NewsArticle id and corresponding
- * data for calculating DHP score for it. 
+ * data for calculating DHP score for it.
  */
 
 public class DPHInNeed implements Serializable {
@@ -13,22 +13,22 @@ public class DPHInNeed implements Serializable {
 
     private String id; // unique article identifier
     private List<String> terms; // origin terms
-    private int termFrequency; // (count) of the term in the document
+    private List<Integer> termFrequencyList; // (count) of the term in the document
     private int documentLength; // The length of the document (in terms)
     private Long documentCount; // count of document
 
-    public DPHInNeed(String id, List<String> terms,int termFrequency, int documentLength ) {
+    public DPHInNeed(String id, List<String> terms, List<Integer> termFrequencyList, int documentLength) {
         this.id = id;
         this.terms = terms;
-        this.termFrequency = termFrequency;
+        this.termFrequencyList = termFrequencyList;
         this.documentLength = documentLength;
         this.documentCount = 1L;
     }
 
-    public DPHInNeed(String id, List<String> terms, int termFrequency, int documentLength, Long documentCount) {
+    public DPHInNeed(String id, List<String> terms, List<Integer> termFrequencyList, int documentLength, Long documentCount) {
         this.id = id;
         this.terms = terms;
-        this.termFrequency = termFrequency;
+        this.termFrequencyList = termFrequencyList;
         this.documentLength = documentLength;
         this.documentCount = documentCount;
     }
@@ -51,21 +51,6 @@ public class DPHInNeed implements Serializable {
     public void setTerms(List<String> terms) {
         this.terms = terms;
     }
-    public int getTermFrequency() {
-        return termFrequency;
-    }
-
-    public void setTermFrequency(int termFrequency) {
-        this.termFrequency = termFrequency;
-    }
-
-    public int getDocumentlength() {
-        return documentLength;
-    }
-
-    public void setDocumentlength(int documentlength) {
-        this.documentLength = documentlength;
-    }
 
     public Long getDocumentCount() {
         return documentCount;
@@ -75,4 +60,19 @@ public class DPHInNeed implements Serializable {
         this.documentCount = documentCount;
     }
 
+    public List<Integer> getTermFrequencyList() {
+        return termFrequencyList;
+    }
+
+    public void setTermFrequencyList(List<Integer> termFrequencyList) {
+        this.termFrequencyList = termFrequencyList;
+    }
+
+    public int getDocumentLength() {
+        return documentLength;
+    }
+
+    public void setDocumentLength(int documentLength) {
+        this.documentLength = documentLength;
+    }
 }
