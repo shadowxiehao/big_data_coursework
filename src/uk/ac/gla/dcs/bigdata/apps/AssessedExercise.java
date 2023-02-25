@@ -13,6 +13,7 @@ import uk.ac.gla.dcs.bigdata.studentfunctions.NewsProcessMap;
 import uk.ac.gla.dcs.bigdata.studentfunctions.RankedResultMap;
 import uk.ac.gla.dcs.bigdata.studentfunctions.TextualDistanceReducer;
 import uk.ac.gla.dcs.bigdata.studentstructures.NewsArticleInNeed;
+import uk.ac.gla.dcs.bigdata.studentstructures.TextualDistanceInNeed;
 import uk.ac.gla.dcs.bigdata.studentstructures.TextualDistanceInNeedList;
 
 import java.io.File;
@@ -69,8 +70,8 @@ public class AssessedExercise {
         // Get the location of the input news articles
         String newsFile = System.getenv("bigdata.news");
         if (newsFile == null)
-//            newsFile = "data/TREC_Washington_Post_collection.v3.example.json"; // default is a sample of 5000 news articles
-            newsFile = "data/TREC_Washington_Post_collection.v2.jl.fix.json"; // the 5g data json
+            newsFile = "data/TREC_Washington_Post_collection.v3.example.json"; // default is a sample of 5000 news articles
+            // newsFile = "data/TREC_Washington_Post_collection.v2.jl.fix.json"; // the 5g data json
 
         // Call the student's code
         List<DocumentRanking> results = rankDocuments(spark, queryFile, newsFile);
@@ -136,7 +137,7 @@ public class AssessedExercise {
             // store the filtered result into a NewsArticleList called filterdNewsArticles, which is a list of ranked documents of size 10
             TextualDistanceInNeedList filterdNewsArticles = newsAsLists.reduce(similarityFilter);
             // cast the filterdNewsArticles to a list of NewsArticleInNeed called filteredAndRankedResults
-            List<NewsArticleInNeed> filteredAndRankedResults = filterdNewsArticles.getNewsList();
+            List<TextualDistanceInNeed> filteredAndRankedResults = filterdNewsArticles.getNewsList();
 
             // use flatMap to map the filteredAndRankedResults from List<NewsArticleInNeed> to Dataset<RankedResult>
             RankedResultMap rankedResultMap = new RankedResultMap(filteredAndRankedResults);

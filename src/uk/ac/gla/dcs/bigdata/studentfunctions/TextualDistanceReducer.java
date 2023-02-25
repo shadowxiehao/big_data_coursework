@@ -3,6 +3,7 @@ package uk.ac.gla.dcs.bigdata.studentfunctions;
 import org.apache.spark.api.java.function.ReduceFunction;
 import uk.ac.gla.dcs.bigdata.providedutilities.TextDistanceCalculator;
 import uk.ac.gla.dcs.bigdata.studentstructures.NewsArticleInNeed;
+import uk.ac.gla.dcs.bigdata.studentstructures.TextualDistanceInNeed;
 import uk.ac.gla.dcs.bigdata.studentstructures.TextualDistanceInNeedList;
 
 import java.util.ArrayList;
@@ -25,16 +26,16 @@ public class TextualDistanceReducer implements ReduceFunction<TextualDistanceInN
 
     // textual distance(reduce duplication)(provided->TextDistanceCalculator.java)
     public TextualDistanceInNeedList call(TextualDistanceInNeedList n1, TextualDistanceInNeedList n2) throws Exception {
-        List<NewsArticleInNeed> temp = new ArrayList<NewsArticleInNeed>();
+        List<TextualDistanceInNeed> temp = new ArrayList<TextualDistanceInNeed>();
 
-        Iterator<NewsArticleInNeed> iteratorN1 = n1.getNewsList().iterator();
-        Iterator<NewsArticleInNeed> iteratorN2 = n2.getNewsList().iterator();
+        Iterator<TextualDistanceInNeed> iteratorN1 = n1.getNewsList().iterator();
+        Iterator<TextualDistanceInNeed> iteratorN2 = n2.getNewsList().iterator();
         while (iteratorN1.hasNext()) {
-            NewsArticleInNeed newsN1 = iteratorN1.next();
+            TextualDistanceInNeed newsN1 = iteratorN1.next();
             while (iteratorN2.hasNext()) {
-                NewsArticleInNeed newsN2 = iteratorN2.next();
-                String one = String.join(",", newsN1.getTerms());
-                String two = String.join(",", newsN2.getTerms());
+                TextualDistanceInNeed newsN2 = iteratorN2.next();
+                String one = newsN1.getTitle();
+                String two = newsN2.getTitle();
                 double textDist = TextDistanceCalculator.similarity(one, two);
                 if (textDist <= 0.5) {
                     Double dphN1 = newsN1.getDphScore();
@@ -56,15 +57,15 @@ public class TextualDistanceReducer implements ReduceFunction<TextualDistanceInN
         }
         temp.addAll(n1.getNewsList());
         temp.addAll(n2.getNewsList());
-        temp.sort(new Comparator<NewsArticleInNeed>() {
-            public int compare(NewsArticleInNeed n1, NewsArticleInNeed n2) {
+        temp.sort(new Comparator<TextualDistanceInNeed>() {
+            public int compare(TextualDistanceInNeed n1, TextualDistanceInNeed n2) {
                 return n2.getDphScore().compareTo(n1.getDphScore());
             }
         });
 //	    comparatorOfDHPScore comparator = new comparatorOfDHPScore();
 //	    Collections.sort(temp, comparator);
 
-        List<NewsArticleInNeed> firstTen = new ArrayList<>(temp.subList(0, Math.min(temp.size(), 10)));
+        List<TextualDistanceInNeed> firstTen = new ArrayList<>(temp.subList(0, Math.min(temp.size(), 10)));
         TextualDistanceInNeedList result = new TextualDistanceInNeedList(firstTen);
 
 //	    if (temp.size()<= 10){
