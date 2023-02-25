@@ -27,8 +27,8 @@ public class NewsProcessMap implements FlatMapFunction<NewsArticle, NewsArticleI
 		// get the value of title of NewsArticle and process the title
 		String title = value.getTitle();
 		List<String> newTitleString = null;
-		if(title==null||title.isBlank()){
-
+		if(title==null||title.isBlank()||title.equals("null")){
+			return Collections.emptyIterator();
 		}else {
 			newTitleString = processor.process(title);
 		}
