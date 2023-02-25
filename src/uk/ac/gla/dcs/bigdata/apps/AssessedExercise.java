@@ -151,6 +151,12 @@ public class AssessedExercise {
         long endTime = System.currentTimeMillis();
         long timeElapsed = endTime - startTime;
         System.out.println("total_time:" + timeElapsed + "(millisecond)" + "\n" + "documentRankingList:" + "\n" + documentRankingList);
+        //for testing (see the web ui)
+        try {
+            Thread.currentThread().sleep(100000000);
+        } catch (Exception e) {
+
+        }
 
         // return the output 
         return documentRankingList;
