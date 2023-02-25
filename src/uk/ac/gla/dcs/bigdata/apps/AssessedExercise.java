@@ -13,7 +13,7 @@ import uk.ac.gla.dcs.bigdata.studentfunctions.NewsProcessMap;
 import uk.ac.gla.dcs.bigdata.studentfunctions.RankedResultMap;
 import uk.ac.gla.dcs.bigdata.studentfunctions.TextualDistanceReducer;
 import uk.ac.gla.dcs.bigdata.studentstructures.NewsArticleInNeed;
-import uk.ac.gla.dcs.bigdata.studentstructures.NewsArticleList;
+import uk.ac.gla.dcs.bigdata.studentstructures.TextualDistanceInNeedList;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -129,12 +129,12 @@ public class AssessedExercise {
 
             // use query terms and NewsArticleInNeed dataset calculate the DPH score of each NewsArticle
             // store result into a dataset of NewsArticleList called newsAsLists
-            Dataset<NewsArticleList> newsAsLists = DPHCalculator.calculateDPHScore(spark, query.getQueryTerms(), newsArticleInNeed);
+            Dataset<TextualDistanceInNeedList> newsAsLists = DPHCalculator.calculateDPHScore(spark, query.getQueryTerms(), newsArticleInNeed);
 
             // create a filter to reduce the duplication of similar documents
             TextualDistanceReducer similarityFilter = new TextualDistanceReducer();
             // store the filtered result into a NewsArticleList called filterdNewsArticles, which is a list of ranked documents of size 10
-            NewsArticleList filterdNewsArticles = newsAsLists.reduce(similarityFilter);
+            TextualDistanceInNeedList filterdNewsArticles = newsAsLists.reduce(similarityFilter);
             // cast the filterdNewsArticles to a list of NewsArticleInNeed called filteredAndRankedResults
             List<NewsArticleInNeed> filteredAndRankedResults = filterdNewsArticles.getNewsList();
 

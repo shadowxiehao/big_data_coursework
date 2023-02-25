@@ -3,7 +3,7 @@ package uk.ac.gla.dcs.bigdata.studentfunctions;
 import org.apache.spark.api.java.function.ReduceFunction;
 import uk.ac.gla.dcs.bigdata.providedutilities.TextDistanceCalculator;
 import uk.ac.gla.dcs.bigdata.studentstructures.NewsArticleInNeed;
-import uk.ac.gla.dcs.bigdata.studentstructures.NewsArticleList;
+import uk.ac.gla.dcs.bigdata.studentstructures.TextualDistanceInNeedList;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -11,7 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 
 
-public class TextualDistanceReducer implements ReduceFunction<NewsArticleList> {
+public class TextualDistanceReducer implements ReduceFunction<TextualDistanceInNeedList> {
 
     /**
      *
@@ -24,7 +24,7 @@ public class TextualDistanceReducer implements ReduceFunction<NewsArticleList> {
 
 
     // textual distance(reduce duplication)(provided->TextDistanceCalculator.java)
-    public NewsArticleList call(NewsArticleList n1, NewsArticleList n2) throws Exception {
+    public TextualDistanceInNeedList call(TextualDistanceInNeedList n1, TextualDistanceInNeedList n2) throws Exception {
         List<NewsArticleInNeed> temp = new ArrayList<NewsArticleInNeed>();
 
         Iterator<NewsArticleInNeed> iteratorN1 = n1.getNewsList().iterator();
@@ -65,7 +65,7 @@ public class TextualDistanceReducer implements ReduceFunction<NewsArticleList> {
 //	    Collections.sort(temp, comparator);
 
         List<NewsArticleInNeed> firstTen = new ArrayList<>(temp.subList(0, Math.min(temp.size(), 10)));
-        NewsArticleList result = new NewsArticleList(firstTen);
+        TextualDistanceInNeedList result = new TextualDistanceInNeedList(firstTen);
 
 //	    if (temp.size()<= 10){
 //	    	return new NewsArticleList(temp);

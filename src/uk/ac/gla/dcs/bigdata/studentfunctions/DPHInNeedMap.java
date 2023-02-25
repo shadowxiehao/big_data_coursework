@@ -30,6 +30,6 @@ public class DPHInNeedMap implements MapFunction<NewsArticleInNeed, DPHInNeed> {
         //The length of the document (in terms)
         int documentLength = documentTerms.size();
 
-        return new DPHInNeed(newsArticleInNeed.getId(), newsArticleInNeed.getTerms(), termCountList, documentLength);
+        return new DPHInNeed(newsArticleInNeed.getId(), newsArticleInNeed.getTerms(), newsArticleInNeed.getTitleLength(), termCountList, documentLength);
     }
 }

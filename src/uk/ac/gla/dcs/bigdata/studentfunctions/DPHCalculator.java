@@ -7,7 +7,7 @@ import org.apache.spark.sql.Encoders;
 import org.apache.spark.sql.SparkSession;
 import uk.ac.gla.dcs.bigdata.studentstructures.DPHInNeed;
 import uk.ac.gla.dcs.bigdata.studentstructures.NewsArticleInNeed;
-import uk.ac.gla.dcs.bigdata.studentstructures.NewsArticleList;
+import uk.ac.gla.dcs.bigdata.studentstructures.TextualDistanceInNeedList;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ import java.util.List;
  */
 public class DPHCalculator {
 
-    public static Dataset<NewsArticleList> calculateDPHScore(SparkSession spark, List<String> queryTerms, Dataset<NewsArticleInNeed> newsArticleInNeed) {
+    public static Dataset<TextualDistanceInNeedList> calculateDPHScore(SparkSession spark, List<String> queryTerms, Dataset<NewsArticleInNeed> newsArticleInNeed) {
 
         //将 queryTerms 广播到所有节点，避免每次运行 calculateDPHScore 方法时都需要传输一次 queryTerms
         Broadcast<List<String>> queryTermsBroadcast = spark.sparkContext().broadcast(queryTerms, scala.reflect.ClassTag$.MODULE$.apply(List.class));
@@ -49,7 +49,7 @@ public class DPHCalculator {
         }
 
         //--calculate the DPH score, and put it in the NewsArticleInNeed, and return as a DataSet<List> for other calculation
-        Encoder<NewsArticleList> newsArticleListEncoder = Encoders.bean(NewsArticleList.class);
+        Encoder<TextualDistanceInNeedList> newsArticleListEncoder = Encoders.bean(TextualDistanceInNeedList.class);
         NewsArticleListMap newsArticleListMap = new NewsArticleListMap(sumDocumentCount, averageDocumentLength, sumTermFrequency);
 
         // map the result to 

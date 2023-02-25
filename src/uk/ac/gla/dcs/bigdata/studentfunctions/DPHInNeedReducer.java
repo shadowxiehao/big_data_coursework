@@ -26,6 +26,6 @@ public class DPHInNeedReducer implements ReduceFunction<DPHInNeed> {
         //The total number of documents in the corpus
         long sumDocumentCount = d1.getDocumentCount() + d2.getDocumentCount();
 
-        return new DPHInNeed("", null, sumTermFrequency, sumDocumentLength, sumDocumentCount);
+        return new DPHInNeed("", null, 0, sumTermFrequency, sumDocumentLength, sumDocumentCount);
     }
 }

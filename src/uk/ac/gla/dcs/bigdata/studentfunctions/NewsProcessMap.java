@@ -33,7 +33,13 @@ public class NewsProcessMap implements FlatMapFunction<NewsArticle, NewsArticleI
         }
 
         // store the processed title into result
-        List<String> result = (newTitleString == null || newTitleString.isEmpty()) ? (new ArrayList<String>()) : newTitleString;
+        if (newTitleString == null || newTitleString.isEmpty()) {
+            return Collections.emptyIterator();
+        }
+        List<String> result = newTitleString;
+
+        //store the position of the title in all terms
+        int titleLenght = newTitleString.size();
 
         // get the value of contents of NewsArticle
         List<ContentItem> contents = value.getContents();
@@ -70,7 +76,7 @@ public class NewsProcessMap implements FlatMapFunction<NewsArticle, NewsArticleI
             return Collections.emptyIterator();
         }
         List<NewsArticleInNeed> nlist = new ArrayList<NewsArticleInNeed>(1);
-        nlist.add(new NewsArticleInNeed(value.getId(), result, 0.0));
+        nlist.add(new NewsArticleInNeed(value.getId(), result, titleLenght, 0.0));
         return nlist.iterator();
     }
 

@@ -2,14 +2,14 @@ package uk.ac.gla.dcs.bigdata.studentstructures;
 
 import java.io.Serializable;
 
-public class NewsTextualDistanceInNeed implements Serializable {
+public class TextualDistanceInNeed implements Serializable {
 
     private static final long serialVersionUID = 1L;
     String id; // unique article identifier
     String title;
     Double dphScore; // DPH score of article
 
-    public NewsTextualDistanceInNeed(String id, String title, Double dphScore) {
+    public TextualDistanceInNeed(String id, String title, Double dphScore) {
         this.id = id;
         this.title = title;
         this.dphScore = dphScore;

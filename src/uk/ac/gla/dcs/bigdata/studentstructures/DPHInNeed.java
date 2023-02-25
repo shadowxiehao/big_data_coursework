@@ -13,21 +13,25 @@ public class DPHInNeed implements Serializable {
 
     private String id; // unique article identifier
     private List<String> terms; // origin terms
+
+    private int titleLength; //record the title position in the terms
     private List<Integer> termFrequencyList; // (count) of the term in the document
     private int documentLength; // The length of the document (in terms)
     private Long documentCount; // count of document
 
-    public DPHInNeed(String id, List<String> terms, List<Integer> termFrequencyList, int documentLength) {
+    public DPHInNeed(String id, List<String> terms, int titleLength, List<Integer> termFrequencyList, int documentLength) {
         this.id = id;
         this.terms = terms;
+        this.titleLength = titleLength;
         this.termFrequencyList = termFrequencyList;
         this.documentLength = documentLength;
         this.documentCount = 1L;
     }
 
-    public DPHInNeed(String id, List<String> terms, List<Integer> termFrequencyList, int documentLength, Long documentCount) {
+    public DPHInNeed(String id, List<String> terms, int titleLength, List<Integer> termFrequencyList, int documentLength, Long documentCount) {
         this.id = id;
         this.terms = terms;
+        this.titleLength = titleLength;
         this.termFrequencyList = termFrequencyList;
         this.documentLength = documentLength;
         this.documentCount = documentCount;
@@ -74,5 +78,13 @@ public class DPHInNeed implements Serializable {
 
     public void setDocumentLength(int documentLength) {
         this.documentLength = documentLength;
+    }
+
+    public int getTitleLength() {
+        return titleLength;
+    }
+
+    public void setTitleLength(int titleLength) {
+        this.titleLength = titleLength;
     }
 }
