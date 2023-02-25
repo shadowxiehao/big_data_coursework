@@ -40,7 +40,7 @@ public class AssessedExercise {
         // The code submitted for the assessed exerise may be run in either local or remote modes
         // Configuration of this will be performed based on an environment variable
         String sparkMasterDef = System.getenv("spark.master");
-        //		String sparkMasterDef = System.getenv("spark.local");
+//		String sparkMasterDef = System.getenv("spark.local");
         if (sparkMasterDef == null) sparkMasterDef = "local[10]"; // default is local mode with two executors
 
         String sparkSessionName = "BigDataAE"; // give the session a name
@@ -48,7 +48,10 @@ public class AssessedExercise {
         // Create the Spark Configuration
         SparkConf conf = new SparkConf()
                 .setMaster(sparkMasterDef)
-                .setAppName(sparkSessionName);
+                .setAppName(sparkSessionName)
+//                .set("spark.eventLog.enabled", "true")
+//                .set("spark.eventLog.dir", "temp")
+                ;
 
         // Create the spark session
         SparkSession spark = SparkSession
@@ -64,7 +67,8 @@ public class AssessedExercise {
         // Get the location of the input news articles
         String newsFile = System.getenv("bigdata.news");
         if (newsFile == null)
-            newsFile = "data/TREC_Washington_Post_collection.v2.jl.fix.json"; // default is a sample of 5000 news articles
+//            newsFile = "data/TREC_Washington_Post_collection.v3.example.json"; // default is a sample of 5000 news articles
+            newsFile = "data/TREC_Washington_Post_collection.v2.jl.fix.json"; // the 5g data json
 
         // Call the student's code
         List<DocumentRanking> results = rankDocuments(spark, queryFile, newsFile);
@@ -116,11 +120,11 @@ public class AssessedExercise {
         // for each query, rank the text documents by relevance for that query, as well as filter out any overly similar documents in the final ranking,
         // and return top 10 documents
         for (Query query : queries.collectAsList()) {
-        	
-        	// use query terms and NewsArticleInNeed dataset calculate the DPH score of each NewsArticle
-        	// store result into a dataset of NewsArticleList called newsAsLists
+
+            // use query terms and NewsArticleInNeed dataset calculate the DPH score of each NewsArticle
+            // store result into a dataset of NewsArticleList called newsAsLists
             Dataset<NewsArticleList> newsAsLists = DPHCalculator.calculateDPHScore(query.getQueryTerms(), newsArticleInNeed);
-            
+
             // create a filter to reduce the duplication of similar documents
             TextualDistanceReducer similarityFilter = new TextualDistanceReducer();
             // store the filtered result into a NewsArticleList called filterdNewsArticles, which is a list of ranked documents of size 10
@@ -131,14 +135,14 @@ public class AssessedExercise {
             // use flatMap to map the filteredAndRankedResults from List<NewsArticleInNeed> to Dataset<RankedResult>
             RankedResultMap rankedResultMap = new RankedResultMap(filteredAndRankedResults);
             Dataset<RankedResult> rankedResultDataset = news.flatMap(rankedResultMap, Encoders.bean(RankedResult.class));
-            
+
             // cast the rankedResultDataset to List<RankedResult>
             List<RankedResult> rankedResults = rankedResultDataset.collectAsList();
             // create a reverse Comparator because the given RankedResult's Comparable interface is in the Ascending order
             Comparator<RankedResult> reverseComparator = Collections.reverseOrder();
             // sort the result again to make the result follow the order of relevance
             rankedResults.sort(reverseComparator);
-            
+
             // add the ranked top 10 documents to documentRankingList
             documentRankingList.add(new DocumentRanking(query, rankedResults));
         }
@@ -149,7 +153,7 @@ public class AssessedExercise {
         System.out.println("total_time:" + timeElapsed + "(millisecond)" + "\n" + "documentRankingList:" + "\n" + documentRankingList);
 
         // return the output 
-        return documentRankingList; 
+        return documentRankingList;
     }
 
 
