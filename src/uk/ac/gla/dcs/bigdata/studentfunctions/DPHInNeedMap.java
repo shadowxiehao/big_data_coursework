@@ -1,15 +1,9 @@
 package uk.ac.gla.dcs.bigdata.studentfunctions;
 
-import com.fasterxml.jackson.databind.util.ArrayIterator;
-import org.apache.spark.api.java.function.FlatMapFunction;
 import org.apache.spark.api.java.function.MapFunction;
-import uk.ac.gla.dcs.bigdata.providedstructures.NewsArticle;
 import uk.ac.gla.dcs.bigdata.studentstructures.DPHInNeed;
 import uk.ac.gla.dcs.bigdata.studentstructures.NewsArticleInNeed;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 public class DPHInNeedMap implements MapFunction<NewsArticleInNeed, DPHInNeed> {

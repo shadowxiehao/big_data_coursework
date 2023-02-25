@@ -10,6 +10,14 @@ import uk.ac.gla.dcs.bigdata.studentstructures.NewsArticleInNeed;
 import java.util.List;
 
 /**
+ * This utility class provides an implementation of the DPH scoring function
+ * based on that provided as part of the Terrier.org IR platform.
+ * 
+ * It calculates the relevance score for a single <term,document> pair, given
+ * some statistics of the corpus.
+ */
+
+/**
  * 	get DPH score(calculate relevance)(provided->DPHScorer.java) , connect with document and query
  */
 public class DPHCalculator {
@@ -31,11 +39,11 @@ public class DPHCalculator {
         Double averageDocumentLength = (double)sumDocumentLength/(double)sumDocumentCount;//The average document length in the corpus (in terms)
         int sumTermFrequency = reducerResult.getTermFrequency();//The sum of term frequencies for the term across all documents
 
-
         //--calculate the DPH score, and put it in the NewsArticleInNeed, and return as a DataSet<List> for other calculation
         Encoder<NewsArticleList> newsArticleListEncoder = Encoders.bean(NewsArticleList.class);
         NewsArticleListMap newsArticleListMap=new NewsArticleListMap(sumDocumentCount,averageDocumentLength,sumTermFrequency);
 
+        // map the result to 
         return dphInNeedDataset.flatMap(newsArticleListMap, newsArticleListEncoder);
     }
 
