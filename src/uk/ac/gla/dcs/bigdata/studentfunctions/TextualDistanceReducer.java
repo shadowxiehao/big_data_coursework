@@ -48,56 +48,6 @@ public class TextualDistanceReducer implements ReduceFunction<TextualDistanceInN
         List<TextualDistanceInNeed> result = new ArrayList<>(textualDistanceProcessList.subList(0, Math.min(textualDistanceProcessList.size(), 10)));
         return new TextualDistanceInNeedList(result);
 
-/*		// create an empty list for return
-		List<TextualDistanceInNeed> result = new ArrayList<TextualDistanceInNeed>();
-
-		// make TextualDistanceInNeedList become iterator
-		Iterator<TextualDistanceInNeed> iteratorN1 = (n1.getNewsList()).iterator();
-		Iterator<TextualDistanceInNeed> iteratorN2 = (n2.getNewsList()).iterator();
-
-		// loop to get each pair of documents
-		while (iteratorN1.hasNext()) {
-			TextualDistanceInNeed newsN1 = iteratorN1.next();
-			String one = newsN1.getTitle();
-			while (iteratorN2.hasNext()) {
-				TextualDistanceInNeed newsN2 = iteratorN2.next();
-				String two = newsN2.getTitle();
-
-				// calculate the textual distance
-				double textDist = TextDistanceCalculator.similarity(one, two);
-
-				// if textual distance is less than 0.5, check the dhp score, remove the one
-				// with lower dph score.
-				if (textDist < 0.5) {
-					Double dphN1 = newsN1.getDphScore();
-					Double dphN2 = newsN2.getDphScore();
-					if (dphN1 >= dphN2) {
-						System.out.println(111);
-						iteratorN2.remove();
-					} else {
-						System.out.println(222);
-						iteratorN1.remove();
-					}
-				}
-			}
-		}
-
-		// add two list to result list
-		result.addAll(n1.getNewsList());
-		result.addAll(n2.getNewsList());
-
-		// sore by dph score
-		result.sort(new Comparator<TextualDistanceInNeed>() {
-			public int compare(TextualDistanceInNeed n1, TextualDistanceInNeed n2) {
-				return n2.getDphScore().compareTo(n1.getDphScore());
-			}
-		});
-
-		// return top 10
-		List<TextualDistanceInNeed> firstTen = new ArrayList<>(result.subList(0, Math.min(result.size(), 10)));
-
-		return new TextualDistanceInNeedList(firstTen);*/
-
     }
 
 }

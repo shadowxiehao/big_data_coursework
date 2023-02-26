@@ -102,16 +102,9 @@ public class AssessedExercise {
         Dataset<Row> queriesjson = spark.read().text(queryFile);
         Dataset<Row> newsjson = spark.read().text(newsFile); // read in files as string rows, one row per article
 
-        // Perform an initial conversion from Dataset<Row> to Query and NewsArticle Java
-        // objects
-        Dataset<Query> queries = queriesjson.map(new QueryFormaterMap(), Encoders.bean(Query.class)); // this converts
-        // each row into
-        // a Query
-        Dataset<NewsArticle> news = newsjson.map(new NewsFormaterMap(), Encoders.bean(NewsArticle.class)); // this
-        // converts
-        // each row
-        // into a
-        // NewsArticle
+        // Perform an initial conversion from Dataset<Row> to Query and NewsArticle Java objects
+        Dataset<Query> queries = queriesjson.map(new QueryFormaterMap(), Encoders.bean(Query.class)); // this converts each row into a Query
+        Dataset<NewsArticle> news = newsjson.map(new NewsFormaterMap(), Encoders.bean(NewsArticle.class)); // this converts each row into a NewsArticle
 
         // ----------------------------------------------------------------
         // Your Spark Topology should be defined here
