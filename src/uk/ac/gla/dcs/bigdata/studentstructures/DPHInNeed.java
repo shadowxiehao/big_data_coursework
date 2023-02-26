@@ -4,87 +4,89 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * This is a class representing a java object that contains NewsArticle id and corresponding
- * data for calculating DHP score for it.
+ * This is a class representing a java object that contains NewsArticle id and
+ * corresponding data for calculating DHP score for it.
  */
 
 public class DPHInNeed implements Serializable {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    private String id; // unique article identifier
-    private List<String> terms; // origin terms
+	private String id; // unique article identifier
+	private List<String> terms; // origin terms
 
-    private int titleLength; //record the title position in the terms
-    private List<Integer> termFrequencyList; // (count) of the term in the document
-    private int documentLength; // The length of the document (in terms)
-    private Long documentCount; // count of document
+	private int titleLength; // record the title position in the terms
+	private List<Integer> termFrequencyList; // (count) of the term in the document
+	private int documentLength; // The length of the document (in terms)
+	private Long documentCount; // count of document
 
-    public DPHInNeed(String id, List<String> terms, int titleLength, List<Integer> termFrequencyList, int documentLength) {
-        this.id = id;
-        this.terms = terms;
-        this.titleLength = titleLength;
-        this.termFrequencyList = termFrequencyList;
-        this.documentLength = documentLength;
-        this.documentCount = 1L;
-    }
+	public DPHInNeed(String id, List<String> terms, int titleLength, List<Integer> termFrequencyList,
+			int documentLength) {
+		this.id = id;
+		this.terms = terms;
+		this.titleLength = titleLength;
+		this.termFrequencyList = termFrequencyList;
+		this.documentLength = documentLength;
+		this.documentCount = 1L;
+	}
 
-    public DPHInNeed(String id, List<String> terms, int titleLength, List<Integer> termFrequencyList, int documentLength, Long documentCount) {
-        this.id = id;
-        this.terms = terms;
-        this.titleLength = titleLength;
-        this.termFrequencyList = termFrequencyList;
-        this.documentLength = documentLength;
-        this.documentCount = documentCount;
-    }
+	public DPHInNeed(String id, List<String> terms, int titleLength, List<Integer> termFrequencyList,
+			int documentLength, Long documentCount) {
+		this.id = id;
+		this.terms = terms;
+		this.titleLength = titleLength;
+		this.termFrequencyList = termFrequencyList;
+		this.documentLength = documentLength;
+		this.documentCount = documentCount;
+	}
 
-    public DPHInNeed() {
-    }
+	public DPHInNeed() {
+	}
 
-    public String getId() {
-        return id;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public void setId(String id) {
-        this.id = id;
-    }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-    public List<String> getTerms() {
-        return terms;
-    }
+	public List<String> getTerms() {
+		return terms;
+	}
 
-    public void setTerms(List<String> terms) {
-        this.terms = terms;
-    }
+	public void setTerms(List<String> terms) {
+		this.terms = terms;
+	}
 
-    public Long getDocumentCount() {
-        return documentCount;
-    }
+	public Long getDocumentCount() {
+		return documentCount;
+	}
 
-    public void setDocumentCount(Long documentCount) {
-        this.documentCount = documentCount;
-    }
+	public void setDocumentCount(Long documentCount) {
+		this.documentCount = documentCount;
+	}
 
-    public List<Integer> getTermFrequencyList() {
-        return termFrequencyList;
-    }
+	public List<Integer> getTermFrequencyList() {
+		return termFrequencyList;
+	}
 
-    public void setTermFrequencyList(List<Integer> termFrequencyList) {
-        this.termFrequencyList = termFrequencyList;
-    }
+	public void setTermFrequencyList(List<Integer> termFrequencyList) {
+		this.termFrequencyList = termFrequencyList;
+	}
 
-    public int getDocumentLength() {
-        return documentLength;
-    }
+	public int getDocumentLength() {
+		return documentLength;
+	}
 
-    public void setDocumentLength(int documentLength) {
-        this.documentLength = documentLength;
-    }
+	public void setDocumentLength(int documentLength) {
+		this.documentLength = documentLength;
+	}
 
-    public int getTitleLength() {
-        return titleLength;
-    }
+	public int getTitleLength() {
+		return titleLength;
+	}
 
-    public void setTitleLength(int titleLength) {
-        this.titleLength = titleLength;
-    }
+	public void setTitleLength(int titleLength) {
+		this.titleLength = titleLength;
+	}
 }

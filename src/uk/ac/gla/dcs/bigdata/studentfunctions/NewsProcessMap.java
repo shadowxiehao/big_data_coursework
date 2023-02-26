@@ -11,73 +11,89 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * This class uses flatMap that map NewsArticle to NewsArticleInNeed.
+ */
 public class NewsProcessMap implements FlatMapFunction<NewsArticle, NewsArticleInNeed> {
 
-    private static final long serialVersionUID = 6475166483071609772L;
+	private static final long serialVersionUID = 6475166483071609772L;
 
-    private transient TextPreProcessor processor;
+	private transient TextPreProcessor processor;
 
-    @Override
-    public Iterator<NewsArticleInNeed> call(NewsArticle value) throws Exception {
+	@Override
+	public Iterator<NewsArticleInNeed> call(NewsArticle value) throws Exception {
 
-        // initial the TextPreProcessor
-        if (processor == null) processor = new TextPreProcessor();
+		// initial the TextPreProcessor
+		if (processor == null)
+			processor = new TextPreProcessor();
 
-        // get the value of title of NewsArticle and process the title
-        String title = value.getTitle();
-        List<String> newTitleString = null;
-        if (title == null || title.isBlank() || title.equals("null")) {
-            return Collections.emptyIterator();
-        } else {
-            newTitleString = processor.process(title);
-        }
+		// get the value of title of NewsArticle and process the title
+		String title = value.getTitle();
 
-        // store the processed title into result
-        if (newTitleString == null || newTitleString.isEmpty()) {
-            return Collections.emptyIterator();
-        }
-        List<String> result = newTitleString;
+		// set a list of string
+		List<String> newTitleString = null;
 
-        //store the position of the title in all terms
-        int titleLenght = newTitleString.size();
+		// if title is empty, return
+		if (title == null || title.isBlank() || title.equals("null")) {
+			return Collections.emptyIterator();
+		} else {
+			// store pre-processed title into newTitleString
+			newTitleString = processor.process(title);
+		}
 
-        // get the value of contents of NewsArticle
-        List<ContentItem> contents = value.getContents();
+		// store the processed title into result, checked again if there is any null
+		if (newTitleString == null || newTitleString.isEmpty()) {
+			return Collections.emptyIterator();
+		}
+		List<String> result = newTitleString;
 
-        // iterate the contents
-        Iterator<ContentItem> contentsIterator = contents.iterator();
-        // count for numbers of paragraph
-        int count = 0;
-        while (contentsIterator.hasNext()) {
+		// store the position of the title in all terms
+		int titleLenght = newTitleString.size();
 
-            ContentItem currentContent = contentsIterator.next();
-            if (currentContent == null) {
-                continue;
-            }
-            String currentContentContent = currentContent.getContent();
-            if (currentContentContent == null || currentContentContent.isBlank()) {
-                continue;
-            }
-            String currentContentSubType = currentContent.getSubtype();
+		// get the value of contents of NewsArticle
+		List<ContentItem> contents = value.getContents();
 
-            if (currentContentSubType != null && currentContentSubType.equals("paragraph")) {
-                List<String> resultOfContent = processor.process(currentContentContent);
-                result.addAll(resultOfContent);
-                count++;
-            }
+		// iterate the contents
+		Iterator<ContentItem> contentsIterator = contents.iterator();
+		// count for numbers of paragraph
+		int count = 0;
+		while (contentsIterator.hasNext()) {
 
-            if (count == 5) {
-                break;
-            }
-        }
-        if (count == 0 || result.isEmpty()) {
-//			List<NewsArticleInNeed> nlist = new ArrayList<NewsArticleInNeed>(0);
-//			return nlist.iterator();
-            return Collections.emptyIterator();
-        }
-        List<NewsArticleInNeed> nlist = new ArrayList<NewsArticleInNeed>(1);
-        nlist.add(new NewsArticleInNeed(value.getId(), result, titleLenght, 0.0));
-        return nlist.iterator();
-    }
+			// check if current content is null or not
+			ContentItem currentContent = contentsIterator.next();
+			if (currentContent == null) {
+				continue;
+			}
+			String currentContentContent = currentContent.getContent();
+			if (currentContentContent == null || currentContentContent.isBlank()) {
+				continue;
+			}
+
+			// get the sub-type of current content
+			String currentContentSubType = currentContent.getSubtype();
+
+			// if sub-type is paragraph, store into result
+			if (currentContentSubType != null && currentContentSubType.equals("paragraph")) {
+				List<String> resultOfContent = processor.process(currentContentContent);
+				result.addAll(resultOfContent);
+				count++;
+			}
+
+			// only take first 5 paragraphs
+			if (count == 5) {
+				break;
+			}
+		}
+
+		// if got nothing, return empty
+		if (count == 0 || result.isEmpty()) {
+			return Collections.emptyIterator();
+		}
+		// otherwise, store result into NewsArticleInNeed
+		List<NewsArticleInNeed> nlist = new ArrayList<NewsArticleInNeed>(1);
+		nlist.add(new NewsArticleInNeed(value.getId(), result, titleLenght, 0.0));
+
+		return nlist.iterator();
+	}
 
 }

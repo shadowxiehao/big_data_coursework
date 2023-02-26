@@ -7,28 +7,28 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
- * This class is a mapping function that maps NewsArticleInNeed to DPHInNeed. 
+ * This class is a reduce function that reduce a data set of DPHInNeed to a
+ * single DPHInNeed.
  */
 
 public class DPHInNeedReducer implements ReduceFunction<DPHInNeed> {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @Override
-    public DPHInNeed call(DPHInNeed d1, DPHInNeed d2) throws Exception {
+	@Override
+	public DPHInNeed call(DPHInNeed d1, DPHInNeed d2) throws Exception {
 
-        //The sum of term frequencies for the term across all documents
-        List<Integer> d1TermFrequencyList = d1.getTermFrequencyList();
-        List<Integer> d2TermFrequencyList = d2.getTermFrequencyList();
-        List<Integer> sumTermFrequency = IntStream.range(0, d1TermFrequencyList.size())
-                .mapToObj(i -> d1TermFrequencyList.get(i) + d2TermFrequencyList.get(i))
-                .collect(Collectors.toList());
+		// The sum of term frequencies for the term across all documents
+		List<Integer> d1TermFrequencyList = d1.getTermFrequencyList();
+		List<Integer> d2TermFrequencyList = d2.getTermFrequencyList();
+		List<Integer> sumTermFrequency = IntStream.range(0, d1TermFrequencyList.size())
+				.mapToObj(i -> d1TermFrequencyList.get(i) + d2TermFrequencyList.get(i)).collect(Collectors.toList());
 
-        //The sum document length in the corpus (in terms)
-        int sumDocumentLength = d1.getDocumentLength() + d2.getDocumentLength();
+		// The sum document length in the corpus (in terms)
+		int sumDocumentLength = d1.getDocumentLength() + d2.getDocumentLength();
 
-        //The total number of documents in the corpus
-        long sumDocumentCount = d1.getDocumentCount() + d2.getDocumentCount();
+		// The total number of documents in the corpus
+		long sumDocumentCount = d1.getDocumentCount() + d2.getDocumentCount();
 
-        return new DPHInNeed("", null, 0, sumTermFrequency, sumDocumentLength, sumDocumentCount);
-    }
+		return new DPHInNeed("", null, 0, sumTermFrequency, sumDocumentLength, sumDocumentCount);
+	}
 }

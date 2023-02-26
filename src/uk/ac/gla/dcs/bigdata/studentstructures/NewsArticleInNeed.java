@@ -5,7 +5,7 @@ import java.util.List;
 
 /**
  * This is a class representing a java object that contains NewsArticle id, corresponding
- * pre-processed data of article(remove stop-words and apply stemming), and DPH score, and DPH score
+ * pre-processed data of article(remove stop-words and apply stemming), title length, and DPH score
  * of current NewsArticle.
  */
 
