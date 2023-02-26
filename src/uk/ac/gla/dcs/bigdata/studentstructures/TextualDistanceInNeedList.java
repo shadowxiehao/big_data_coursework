@@ -8,23 +8,23 @@ import java.util.List;
  */
 
 public class TextualDistanceInNeedList implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	List<TextualDistanceInNeed> distanceInNeedList; // a list of NewsArticleInNeed
+    List<TextualDistanceInNeed> distanceInNeedList; // a list of NewsArticleInNeed
 
-	public TextualDistanceInNeedList() {
-	}
+    public TextualDistanceInNeedList() {
+    }
 
-	public TextualDistanceInNeedList(List<TextualDistanceInNeed> distanceInNeedList) {
-		this.distanceInNeedList = distanceInNeedList;
-	}
+    public TextualDistanceInNeedList(List<TextualDistanceInNeed> distanceInNeedList) {
+        this.distanceInNeedList = distanceInNeedList;
+    }
 
-	public List<TextualDistanceInNeed> getNewsList() {
-		return distanceInNeedList;
-	}
+    public List<TextualDistanceInNeed> getDistanceInNeedList() {
+        return distanceInNeedList;
+    }
 
-	public void setNewsList(List<TextualDistanceInNeed> distanceInNeedList) {
-		this.distanceInNeedList = distanceInNeedList;
-	}
+    public void setDistanceInNeedList(List<TextualDistanceInNeed> distanceInNeedList) {
+        this.distanceInNeedList = distanceInNeedList;
+    }
 
 }

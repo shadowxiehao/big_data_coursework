@@ -21,54 +21,54 @@ import java.util.List;
 
 public class DPHCalculator {
 
-	/**
-	 * Calculates the DPH score for a list of query term in a data set of documents
-	 * 
-	 * @param SparkSession      // the spark session
-	 * @param queryTerms        // a list of query term
-	 * @param newsArticleInNeed // a data set of NewsArticleInNeed
-	 * @return
-	 */
-	public static Dataset<TextualDistanceInNeedList> calculateDPHScore(SparkSession spark, List<String> queryTerms,
-			Dataset<NewsArticleInNeed> newsArticleInNeed) {
+    /**
+     * Calculates the DPH score for a list of query term in a data set of documents
+     *
+     * @param spark             the spark session
+     * @param queryTerms        a list of query term
+     * @param newsArticleInNeed a data set of NewsArticleInNeed
+     * @return the structure needed for similarity detection reducer (id,title,dph,etc.)
+     */
+    public static Dataset<TextualDistanceInNeedList> calculateDPHScore(SparkSession spark, List<String> queryTerms,
+                                                                       Dataset<NewsArticleInNeed> newsArticleInNeed) {
 
-		// broadcast the query terms
-		Broadcast<List<String>> queryTermsBroadcast = spark.sparkContext().broadcast(queryTerms,
-				scala.reflect.ClassTag$.MODULE$.apply(List.class));
+        // broadcast the query terms
+        Broadcast<List<String>> queryTermsBroadcast = spark.sparkContext().broadcast(queryTerms,
+                scala.reflect.ClassTag$.MODULE$.apply(List.class));
 
-		// user queryTermsBroadcast to calculate both the TermFrequency (count of the
-		// term in the document) and the length of the document (in terms)
-		DPHInNeedMap dphInNeedMap = new DPHInNeedMap(queryTermsBroadcast);
+        // user queryTermsBroadcast to calculate both the TermFrequency (count of the
+        // term in the document) and the length of the document (in terms)
+        DPHInNeedMap dphInNeedMap = new DPHInNeedMap(queryTermsBroadcast);
 
-		// map newsArticleInNeed to DPHInNeed
-		Encoder<DPHInNeed> dPHInNeedEncoder = Encoders.bean(DPHInNeed.class);
-		Dataset<DPHInNeed> dphInNeedDataset = newsArticleInNeed.map(dphInNeedMap, dPHInNeedEncoder);
+        // map newsArticleInNeed to DPHInNeed
+        Encoder<DPHInNeed> dPHInNeedEncoder = Encoders.bean(DPHInNeed.class);
+        Dataset<DPHInNeed> dphInNeedDataset = newsArticleInNeed.map(dphInNeedMap, dPHInNeedEncoder);
 
-		// calculate the average document length in the corpus (in terms), the sum of
-		// term frequencies for the term
-		// across all documents, the total number of documents in the corpus
-		DPHInNeed reducerResult = dphInNeedDataset.reduce(new DPHInNeedReducer());
+        // calculate the average document length in the corpus (in terms), the sum of
+        // term frequencies for the term
+        // across all documents, the total number of documents in the corpus
+        DPHInNeed reducerResult = dphInNeedDataset.reduce(new DPHInNeedReducer());
 
-		// get document length
-		int sumDocumentLength = reducerResult.getDocumentLength();
-		// The total number of documents in the corpus
-		long sumDocumentCount = reducerResult.getDocumentCount();
-		// The average document length in the corpus (in terms)
-		Double averageDocumentLength = (double) sumDocumentLength / (double) sumDocumentCount;
-		// The sum of term frequencies for the term across all documents
-		int sumTermFrequency = 0;
-		for (Integer termFrequency : reducerResult.getTermFrequencyList()) {
-			sumTermFrequency += termFrequency;
-		}
+        // get document length
+        int sumDocumentLength = reducerResult.getDocumentLength();
+        // The total number of documents in the corpus
+        long sumDocumentCount = reducerResult.getDocumentCount();
+        // The average document length in the corpus (in terms)
+        Double averageDocumentLength = (double) sumDocumentLength / (double) sumDocumentCount;
+        // The sum of term frequencies for the term across all documents
+        int sumTermFrequency = 0;
+        for (Integer termFrequency : reducerResult.getTermFrequencyList()) {
+            sumTermFrequency += termFrequency;
+        }
 
-		// calculate the DPH score, and put it in the NewsArticleInNeed, and return as a
-		// DataSet<List> for other calculation
-		Encoder<TextualDistanceInNeedList> TextualDistanceEncoder = Encoders.bean(TextualDistanceInNeedList.class);
-		NewsArticleListMap newsArticleListMap = new NewsArticleListMap(sumDocumentCount, averageDocumentLength,
-				sumTermFrequency);
+        // calculate the DPH score, and put it in the NewsArticleInNeed, and return as a
+        // DataSet<List> for other calculation
+        Encoder<TextualDistanceInNeedList> TextualDistanceEncoder = Encoders.bean(TextualDistanceInNeedList.class);
+        NewsArticleListMap newsArticleListMap = new NewsArticleListMap(sumDocumentCount, averageDocumentLength,
+                sumTermFrequency);
 
-		// map the result to Dataset<TextualDistanceInNeedList>
-		return dphInNeedDataset.flatMap(newsArticleListMap, TextualDistanceEncoder);
-	}
+        // map the result to Dataset<TextualDistanceInNeedList>
+        return dphInNeedDataset.flatMap(newsArticleListMap, TextualDistanceEncoder);
+    }
 
 }
