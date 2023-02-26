@@ -1,7 +1,6 @@
 target
 bin
 .settings
-results
 temp/*
 .classpath
 Notes.docx
