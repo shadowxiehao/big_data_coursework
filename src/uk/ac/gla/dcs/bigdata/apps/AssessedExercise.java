@@ -1,6 +1,7 @@
 package uk.ac.gla.dcs.bigdata.apps;
 
 import org.apache.spark.SparkConf;
+import org.apache.spark.broadcast.Broadcast;
 import org.apache.spark.sql.*;
 import uk.ac.gla.dcs.bigdata.providedfunctions.NewsFormaterMap;
 import uk.ac.gla.dcs.bigdata.providedfunctions.QueryFormaterMap;
@@ -46,7 +47,8 @@ public class AssessedExercise {
         String sparkMasterDef = System.getenv("spark.master");
 //		String sparkMasterDef = System.getenv("spark.local");
         if (sparkMasterDef == null)
-            sparkMasterDef = "local[*]"; // default is local mode with two executors
+//            sparkMasterDef = "local[2]"; // default is local mode with two executors
+            sparkMasterDef = "local[*]"; // full executors for testing
 
         String sparkSessionName = "BigDataAE"; // give the session a name
 
@@ -65,7 +67,7 @@ public class AssessedExercise {
         String newsFile = System.getenv("bigdata.news");
         if (newsFile == null)
             newsFile = "data/TREC_Washington_Post_collection.v3.example.json"; // default is a sample of 5000 news articles
-        // newsFile = "data/TREC_Washington_Post_collection.v2.jl.fix.json"; // the 5g data json
+        // newsFile = "data/TREC_Washington_Post_collection.v2.jl.fix.json"; // the 5g data json,we put the data in the .gitignore, so you need to personally download it
 
         // Call the student's code
         List<DocumentRanking> results = rankDocuments(spark, queryFile, newsFile);
@@ -138,9 +140,13 @@ public class AssessedExercise {
             // filteredAndRankedResults
             List<TextualDistanceInNeed> filteredAndRankedResults = filterdNewsArticles.getDistanceInNeedList();
 
+            // broadcast the 10 filtered TextualDistanceInNeed
+            Broadcast<List<TextualDistanceInNeed>> filteredAndRankedResultsBroadcast = spark.sparkContext().broadcast(filteredAndRankedResults,
+                    scala.reflect.ClassTag$.MODULE$.apply(List.class));
+
             // use flatMap to map the filteredAndRankedResults from
             // List<TextualDistanceInNeed> to Dataset<RankedResult>
-            RankedResultMap rankedResultMap = new RankedResultMap(filteredAndRankedResults);
+            RankedResultMap rankedResultMap = new RankedResultMap(filteredAndRankedResultsBroadcast);
             Dataset<RankedResult> rankedResultDataset = news.flatMap(rankedResultMap,
                     Encoders.bean(RankedResult.class));
 

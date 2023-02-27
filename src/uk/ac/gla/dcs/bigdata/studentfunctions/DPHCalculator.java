@@ -12,18 +12,13 @@ import uk.ac.gla.dcs.bigdata.studentstructures.TextualDistanceInNeedList;
 import java.util.List;
 
 /**
- * This class provides an implementation of the DPH scoring function based on
- * provided function. After mapping the input query terms and newsArticle info
- * to DPHInNeed type, we calculate and store the dph score into a list of
- * TextualDistanceInNeed, which is a class contains all information needed for
- * calculating textual distance.
+ * This class is responsible for calculating the DPH values
+ * based on the query terms and the necessary article information content in NewsArticleInNeed,
+ * and converting the results into TextualDistanceInNeedList for subsequent filtering.
  */
-
 public class DPHCalculator {
 
     /**
-     * Calculates the DPH score for a list of query term in a data set of documents
-     *
      * @param spark             the spark session
      * @param queryTerms        a list of query term
      * @param newsArticleInNeed a data set of NewsArticleInNeed

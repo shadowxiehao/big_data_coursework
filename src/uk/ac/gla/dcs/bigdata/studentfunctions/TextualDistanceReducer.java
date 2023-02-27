@@ -12,17 +12,20 @@ import java.util.List;
  * @summary core algorithm of the similarity filtering code: using the approach of sorting by PDH value in descending order
  * and then starting deduplication from the end,
  * to ensure higher efficiency and consistent, correct results every time.
+ * <p>
+ * This reducer adds the List elements from the two obtained TextualDistanceInNeedList together
+ * to obtain a new list called textualDistanceProcessList.
+ * The textualDistanceProcessList is then sorted in descending order by DPH score. Starting from the last element,
+ * the function compares the similarity of the current element to the elements before it.
+ * If the similarity between the current element and the one before it is too high (textDistance < 0.5),
+ * then the current element is excluded; otherwise, it is retained.
+ * Then, the top 10 elements of textualDistanceProcessList are selected,
+ * or the length of the list is used if it is less than 10, and stored in a new list called result.
+ * Finally, the function returns this list.
  */
 public class TextualDistanceReducer implements ReduceFunction<TextualDistanceInNeedList> {
 
     private static final long serialVersionUID = -6219052801635837096L;
-
-    /**
-     * it will calculate the textual distance of each pair of two
-     * TextualDistanceInNeedList, if the value is less then 0.5, the function will
-     * return the one with higher dhp score. Finally, return top 10 relevance
-     * TextualDistanceInNeed as a list of TextualDistanceInNeed.
-     */
 
     public TextualDistanceInNeedList call(TextualDistanceInNeedList n1, TextualDistanceInNeedList n2) throws Exception {
 

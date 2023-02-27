@@ -14,6 +14,15 @@ import java.util.stream.Collectors;
 
 /**
  * This class uses flatMap that map DPHInNeed to TextualDistanceInNeedList.
+ * Using the previously calculated:
+ * 1. term frequency of each query term in each document and the length of the current document.
+ * 2. total TermFrequency, average article length, and total number of articles obtained by the reducer.
+ * This function calculates the DPH score of each query term in the current document
+ * and adds up the DPH scores of each term and divides the total by the number of terms to obtain the average DPH score.
+ * If the effective average DPH score is greater than 0,
+ * the part of the current document's terms that belongs to the title is extracted and converted to a string.
+ * Then, the document ID, title, and DPH value are stored in TextualDistanceInNeed,
+ * which is stored in TextualDistanceInNeedList for subsequent similarity filtering.
  */
 public class NewsArticleListMap implements FlatMapFunction<DPHInNeed, TextualDistanceInNeedList> {
 
@@ -34,10 +43,10 @@ public class NewsArticleListMap implements FlatMapFunction<DPHInNeed, TextualDis
 
 		// to count the term with non-none termFrequency
 		int validTerm = 0;
-		Double dphScore = 0.0;
+		double dphScore = 0.0;
 
 		for (int termFrequency : dPHInNeed.getTermFrequencyList()) {
-			if (termFrequency == 0) {
+			if (termFrequency == 0) {//means no dph score will come out
 				continue;
 			}
 			validTerm++;
