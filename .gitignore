@@ -2,6 +2,7 @@ target
 bin
 data
 .settings
+results
 temp/*
 .classpath
 Notes.docx
