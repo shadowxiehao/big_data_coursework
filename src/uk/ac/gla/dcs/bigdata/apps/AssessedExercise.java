@@ -66,8 +66,8 @@ public class AssessedExercise {
         // Get the location of the input news articles
         String newsFile = System.getenv("bigdata.news");
         if (newsFile == null)
-            newsFile = "data/TREC_Washington_Post_collection.v3.example.json"; // default is a sample of 5000 news articles
-        // newsFile = "data/TREC_Washington_Post_collection.v2.jl.fix.json"; // the 5g data json,we put the data in the .gitignore, so you need to personally download it
+//            newsFile = "data/TREC_Washington_Post_collection.v3.example.json"; // default is a sample of 5000 news articles
+            newsFile = "data/TREC_Washington_Post_collection.v2.jl.fix.json"; // the 5g data json,we put the data in the .gitignore, so you need to personally download it
 
         // Call the student's code
         List<DocumentRanking> results = rankDocuments(spark, queryFile, newsFile);
